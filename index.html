@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Dãy nhị phân cố định</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: #eee;
+    padding: 20px;
+}
+
+.main {
+    display: flex;
+    gap: 24px;
+}
+
+.box {
+    flex: 1;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 12px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.box h3 {
+    margin: 0 0 12px;
+    text-align: center;
+    font-size: 14px;
+    color: #bbb;
+}
+
+.group-title {
+    margin: 14px 0 6px;
+    padding: 6px 10px;
+    background: #222;
+    border-left: 4px solid #ff9800;
+    color: #ddd;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 30px auto;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.index {
+    text-align: right;
+    color: #888;
+    font-size: 13px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(5, 30px);
+    gap: 4px;
+}
+
+.cell {
+    background: #ffd9a0;
+    padding: 3px 0;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: bold;
+    user-select: all;
+}
+
+.cell[data-bit="1"] { color: #ff3333; }
+.cell[data-bit="0"] { color: #8b5cf6; }
+
+#copyArea {
+    position: absolute;
+    left: -9999px;
+    white-space: pre;
+}
+</style>
+</head>
+
+<body>
+
+<h2>60 dãy nhị phân (cố định)</h2>
+
+<div class="main">
+    <div class="box">
+        <h3>Dãy gốc</h3>
+        <div id="box-original"></div>
+    </div>
+
+    <div class="box">
+        <h3>Dãy copy</h3>
+        <div id="box-copy"></div>
+    </div>
+</div>
+
+<textarea id="copyArea"></textarea>
+
+<script>
+// ====== DỮ LIỆU CỐ ĐỊNH (ví dụ 60 dãy) ======
+const data = [
+    // 30 dãy đầu
+    [0,1,0,1,0],[1,0,1,0,1],[0,0,1,1,0],[1,1,0,0,1],[0,1,1,0,0],
+    [1,0,0,1,1],[0,1,0,0,1],[1,0,1,1,0],[0,0,0,1,1],[1,1,1,0,0],
+    [0,1,1,1,0],[1,0,0,0,1],[0,0,1,0,1],[1,1,0,1,0],[0,1,0,1,1],
+    [1,0,1,0,0],[0,0,0,0,1],[1,1,1,1,0],[0,1,1,0,1],[1,0,0,1,0],
+    [0,1,0,0,0],[1,0,1,1,1],[0,0,1,1,1],[1,1,0,0,0],[0,1,1,1,1],
+    [1,0,0,0,0],[0,0,1,0,0],[1,1,0,1,1],[0,1,0,1,0],[1,0,1,0,1],
+
+    // 30 dãy sau
+    [0,0,1,1,0],[1,1,0,0,1],[0,1,1,0,0],[1,0,0,1,1],[0,1,0,0,1],
+    [1,0,1,1,0],[0,0,0,1,1],[1,1,1,0,0],[0,1,1,1,0],[1,0,0,0,1],
+    [0,0,1,0,1],[1,1,0,1,0],[0,1,0,1,1],[1,0,1,0,0],[0,0,0,0,1],
+    [1,1,1,1,0],[0,1,1,0,1],[1,0,0,1,0],[0,1,0,0,0],[1,0,1,1,1],
+    [0,0,1,1,1],[1,1,0,0,0],[0,1,1,1,1],[1,0,0,0,0],[0,0,1,0,0],
+    [1,1,0,1,1],[0,1,0,1,0],[1,0,1,0,1],[0,0,1,1,0],[1,1,0,0,1]
+];
+
+const box1 = document.getElementById('box-original');
+const box2 = document.getElementById('box-copy');
+const copyArea = document.getElementById('copyArea');
+
+const SPLIT = 30;
+let copyText = '';
+
+// ====== RENDER ======
+data.forEach((row, i) => {
+
+    // tiêu đề nhóm
+    if (i === 0) {
+        const t = document.createElement('div');
+        t.className = 'group-title';
+        t.textContent = '30 dãy đầu';
+        box1.appendChild(t.cloneNode(true));
+        box2.appendChild(t);
+    }
+
+    if (i === SPLIT) {
+        const t = document.createElement('div');
+        t.className = 'group-title';
+        t.textContent = '30 dãy sau';
+        box1.appendChild(t.cloneNode(true));
+        box2.appendChild(t);
+    }
+
+    // hàng gốc
+    const w1 = document.createElement('div');
+    w1.className = 'wrapper';
+
+    const idx1 = document.createElement('div');
+    idx1.className = 'index';
+    idx1.textContent = i + 1;
+
+    const r1 = document.createElement('div');
+    r1.className = 'row';
+
+    row.forEach(bit => {
+        const c = document.createElement('div');
+        c.className = 'cell';
+        c.dataset.bit = bit;
+        c.textContent = bit;
+        r1.appendChild(c);
+    });
+
+    w1.appendChild(idx1);
+    w1.appendChild(r1);
+    box1.appendChild(w1);
+
+    // hàng copy
+    const w2 = w1.cloneNode(true);
+    box2.appendChild(w2);
+
+    // text copy cho Google Sheets
+    copyText += row.join('\t') + '\n';
+});
+
+// ====== COPY TOÀN BỘ ======
+copyArea.value = copyText;
+document.addEventListener('copy', e => {
+    e.clipboardData.setData('text/plain', copyArea.value);
+    e.preventDefault();
+});
+</script>
+
+<p style="color:#888;font-size:13px;margin-top:10px">
+Ctrl+C rồi dán vào Google Sheets → mỗi bit vào đúng ô theo hàng ngang.
+</p>
+
+</body>
+</html>
