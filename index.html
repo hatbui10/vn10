@@ -1,199 +1,185 @@
+Đã dùng 85% bộ nhớ … Nếu hết bộ nhớ, thì bạn không thể lưu tệp vào Drive hoặc sao lưu vào Google Photos. Tiết kiệm 50% khi mua các gói hằng năm cho 1 năm với ưu đãi đặc biệt dịp Năm mới.
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Dãy nhị phân cố định</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>60 dãy A – Mask 5 bit</title>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: #111;
-    color: #eee;
-    padding: 20px;
+body { font-family: Arial, sans-serif; padding: 10px; }
+table { border-collapse: collapse; width: 100%; max-width: 1800px; }
+th, td { border: 1px solid #ccc; padding: 4px; text-align: center; }
+input.bit {
+  width: 30px;
+  font-size: 18px;
+  text-align: center;
 }
 
-.main {
-    display: flex;
-    gap: 24px;
+input.bit {
+  width: 30px;
+  height: 36px;
+  font-size: 18px;
+  text-align: center;
+  margin: 0 6px;
+  border-radius: 8px;        /* bo tròn hơn */
+  border: 1px solid #999;
+  outline: none;
 }
 
-.box {
-    flex: 1;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 12px;
-    padding: 12px;
-    max-height: 70vh;
-    overflow-y: auto;
+input.bit:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 3px rgba(0,123,255,.6);
 }
 
-.box h3 {
-    margin: 0 0 12px;
-    text-align: center;
-    font-size: 14px;
-    color: #bbb;
+.bit-box { display: inline-block; width: 26px; }
+.changed { background: #ff4d4d; color: #fff; font-weight: bold; }
+textarea.row-output {
+  width: 150px;
+  height: 32px;
+  resize: none;
+  font-family: monospace;
+  font-size: 14px;
 }
-
-.group-title {
-    margin: 14px 0 6px;
-    padding: 6px 10px;
-    background: #222;
-    border-left: 4px solid #ff9800;
-    color: #ddd;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.wrapper {
-    display: grid;
-    grid-template-columns: 30px auto;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 6px;
-}
-
-.index {
-    text-align: right;
-    color: #888;
-    font-size: 13px;
-}
-
-.row {
-    display: grid;
-    grid-template-columns: repeat(5, 30px);
-    gap: 4px;
-}
-
-.cell {
-    background: yellow;
-    padding: 3px 0;
-    text-align: center;
-    border-radius: 4px;
-    font-weight: bold;
-    user-select: all;
-}
-
-.cell[data-bit="1"] { color:  #ff3333; }
-.cell[data-bit="0"] { color: #8b5cf6; }
-
-#copyArea {
-    position: absolute;
-    left: -9999px;
-    white-space: pre;
+button {
+  margin: 6px 6px 12px 0;
+  padding: 8px 20px;
+  font-size: 16px;
 }
 </style>
 </head>
 
 <body>
 
-<h2>60 dãy nhị phân (cố định)</h2>
+<h3>60 dãy A (5 bit) – Cách 3 + Xuất const</h3>
 
-<div class="main">
-    <div class="box">
-        <h3>Dãy gốc</h3>
-        <div id="box-original"></div>
-    </div>
+<button onclick="copyAll()">Copy const FINAL_MASKS</button>
+<button onclick="resetAll()">Reset (giữ mask đã sửa)</button>
 
-    <div class="box">
-        <h3>Dãy copy</h3>
-        <div id="box-copy"></div>
-    </div>
-</div>
-
-<textarea id="copyArea"></textarea>
+<table>
+<thead>
+<tr>
+  <th>#</th>
+  <th>A (5 bit)</th>
+  <th>Mask ban đầu</th>
+  <th>C = A XOR Mask</th>
+  <th>Mask sau sửa</th>
+  <th>Chuỗi mask sau sửa</th>
+</tr>
+</thead>
+<tbody id="rows"></tbody>
+</table>
 
 <script>
-// ====== DỮ LIỆU CỐ ĐỊNH (ví dụ 60 dãy) ======
-const data = [
-    // 30 dãy đầu
-    [0,1,0,1,0],[1,0,1,0,1],[0,0,1,1,0],[1,1,0,0,1],[0,1,1,0,0],
-    [1,0,0,1,1],[0,1,0,0,1],[1,0,1,1,0],[0,0,0,1,1],[1,1,1,0,0],
-    [0,1,1,1,0],[1,0,0,0,1],[0,0,1,0,1],[1,1,0,1,0],[0,1,0,1,1],
-    [1,0,1,0,0],[0,0,0,0,1],[1,1,1,1,0],[0,1,1,0,1],[1,0,0,1,0],
-    [0,1,0,0,0],[1,0,1,1,1],[0,0,1,1,1],[1,1,0,0,0],[0,1,1,1,1],
-    [1,0,0,0,0],[0,0,1,0,0],[1,1,0,1,1],[0,1,0,1,0],[1,0,1,0,1],
-
-    // 30 dãy sau
-    [0,0,1,1,0],[1,1,0,0,1],[0,1,1,0,0],[1,0,0,1,1],[0,1,0,0,1],
-    [1,0,1,1,0],[0,0,0,1,1],[1,1,1,0,0],[0,1,1,1,0],[1,0,0,0,1],
-    [0,0,1,0,1],[1,1,0,1,0],[0,1,0,1,1],[1,0,1,0,0],[0,0,0,0,1],
-    [1,1,1,1,0],[0,1,1,0,1],[1,0,0,1,0],[0,1,0,0,0],[1,0,1,1,1],
-    [0,0,1,1,1],[1,1,0,0,0],[0,1,1,1,1],[1,0,0,0,0],[0,0,1,0,0],
-    [1,1,0,1,1],[0,1,0,1,0],[1,0,1,0,1],[0,0,1,1,0],[1,1,0,0,1]
+/* ===== 60 MASK BAN ĐẦU ===== */
+const MASKS = [
+  "10101","01010","11000","00111","10010","01101",
+  "11100","00011","10110","01001","11010","00101",
+  "10001","01110","11101","00010","10100","01011",
+  "11001","00110","10011","01100","11110","00001",
+  "10111","01000","11011","00100","10000","01111",
+  "11111","00000","10101","01010","11000","00111",
+  "10010","01101","11100","00011","10110","01001",
+  "11010","00101","10001","01110","11101","00010",
+  "10111","01000","11011","00100","10000","01111",
+  "11111","00000","10101","01010","11000","00111"
 ];
 
-const box1 = document.getElementById('box-original');
-const box2 = document.getElementById('box-copy');
-const copyArea = document.getElementById('copyArea');
+/* ===== CONST KẾT QUẢ CUỐI ===== */
+const FINAL_MASKS = Array(60).fill(null);
 
-const SPLIT = 30;
-let copyText = '';
+const tbody = document.getElementById("rows");
 
-// ====== RENDER ======
-data.forEach((row, i) => {
+/* ===== TẠO BẢNG ===== */
+for (let i = 0; i < 60; i++) {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${i + 1}</td>
+    <td>
+      ${Array(5).fill(0).map(() =>
+        `<input class="bit" maxlength="1"
+                inputmode="numeric" pattern="[01]"
+                oninput="handleInput(this)">`
+      ).join("")}
+    </td>
+    <td>${renderBits(MASKS[i])}</td>
+    <td id="c-${i}"></td>
+    <td id="out-${i}"></td>
+    <td>
+      <textarea class="row-output" id="txt-${i}" readonly></textarea>
+    </td>
+  `;
+  tbody.appendChild(tr);
+}
 
-    // tiêu đề nhóm
-    if (i === 0) {
-        const t = document.createElement('div');
-        t.className = 'group-title';
-        t.textContent = '30 dãy đầu';
-        box1.appendChild(t.cloneNode(true));
-        box2.appendChild(t);
-    }
+/* ===== RENDER BIT ===== */
+function renderBits(bits, changed = []) {
+  return bits.split("").map((b, i) =>
+    `<span class="bit-box ${changed.includes(i) ? 'changed' : ''}">${b}</span>`
+  ).join("");
+}
 
-    if (i === SPLIT) {
-        const t = document.createElement('div');
-        t.className = 'group-title';
-        t.textContent = '30 dãy sau';
-        box1.appendChild(t.cloneNode(true));
-        box2.appendChild(t);
-    }
+/* ===== NHẬP BIT ===== */
+function handleInput(el) {
+  el.value = el.value.replace(/[^01]/g, "");
+  if (el.value && el.nextElementSibling) el.nextElementSibling.focus();
 
-    // hàng gốc
-    const w1 = document.createElement('div');
-    w1.className = 'wrapper';
+  const row = el.closest("tr");
+  const inputs = row.querySelectorAll("input.bit");
+  if ([...inputs].every(i => i.value !== "")) {
+    calculateRow(row);
+    row.nextElementSibling?.querySelector("input.bit")?.focus();
+  }
+}
 
-    const idx1 = document.createElement('div');
-    idx1.className = 'index';
-    idx1.textContent = i + 1;
+/* ===== TÍNH 1 HÀNG ===== */
+function calculateRow(row) {
+  const idx = row.rowIndex - 1;
+  const A = [...row.querySelectorAll("input.bit")].map(i => +i.value);
+  let mask = MASKS[idx].split("").map(Number);
+  let changed = [];
 
-    const r1 = document.createElement('div');
-    r1.className = 'row';
+  let C = A.map((b, i) => b ^ mask[i]);
+  let ones = [];
+  for (let i = 0; i < 5; i++) if (C[i] === 1) ones.push(i);
 
-    row.forEach(bit => {
-        const c = document.createElement('div');
-        c.className = 'cell';
-        c.dataset.bit = bit;
-        c.textContent = bit;
-        r1.appendChild(c);
-    });
+  while (ones.length > 2) {
+    const pos = ones[Math.floor(Math.random() * ones.length)];
+    mask[pos] ^= 1;
+    C[pos] ^= 1;
+    changed.push(pos);
+    ones = ones.filter(i => i !== pos);
+  }
 
-    w1.appendChild(idx1);
-    w1.appendChild(r1);
-    box1.appendChild(w1);
+  FINAL_MASKS[idx] = mask.slice();
 
-    // hàng copy
-    const w2 = w1.cloneNode(true);
-    box2.appendChild(w2);
+  document.getElementById(`c-${idx}`).innerHTML = renderBits(C.join(""));
+  document.getElementById(`out-${idx}`).innerHTML = renderBits(mask.join(""), changed);
+  document.getElementById(`txt-${idx}`).value =
+    `[${mask.join(",")}],`;
+}
 
-    // text copy cho Google Sheets
-    copyText += row.join('\t') + '\n';
-});
+/* ===== COPY CONST ===== */
+function copyAll() {
+  if (FINAL_MASKS.some(v => v === null)) {
+    alert("Chưa đủ 60 mask");
+    return;
+  }
 
-// ====== COPY TOÀN BỘ ======
-copyArea.value = copyText;
-document.addEventListener('copy', e => {
-    e.clipboardData.setData('text/plain', copyArea.value);
-    e.preventDefault();
-});
+  const text =
+`const FINAL_MASKS = [
+${FINAL_MASKS.map(m => `  [${m.join(",")}],`).join("\n")}
+];`;
+
+  navigator.clipboard.writeText(text);
+  alert("Đã copy const FINAL_MASKS");
+}
+
+/* ===== RESET ===== */
+function resetAll() {
+  document.querySelectorAll("input.bit").forEach(i => i.value = "");
+}
 </script>
-
-<p style="color:#888;font-size:13px;margin-top:10px">
-Ctrl+C rồi dán vào Google Sheets → mỗi bit vào đúng ô theo hàng ngang.
-</p>
 
 </body>
 </html>
-
-
-
