@@ -86,7 +86,7 @@ button {
 
 <body>
 
-<h3>60 dãy A (5 bit) - Lucky st8 </h3>
+<h3>60 dãy A (5 bit) - Lucky st9 </h3>
 
 <button onclick="copyAll()">Copy const FINAL_MASKS</button>
 <button onclick="resetAll()">Reset</button>
@@ -188,6 +188,8 @@ function calculateRow(row) {
     el.value = C[i];
     el.style.color = C[i] ? "red" : "#0096c7";
   });
+  const rowIdx = row.rowIndex - 1;
+highlightAMatchWithPrevC(rowIdx);
 
 /* --- MASK SAU SỬA --- */
 let newMask = baseMask.slice();
@@ -226,8 +228,7 @@ row.querySelector(`#out-${idx}`).innerHTML =
 
 document.getElementById(`txt-${idx}`).value =
   `[${newMask.join(",")}],`;
-  const rowIdx = row.rowIndex - 1;
-highlightAMatchWithPrevC(rowIdx);
+  
 
 }
 
@@ -306,5 +307,6 @@ function resetAll() {
 
 </body>
 </html>
+
 
 
