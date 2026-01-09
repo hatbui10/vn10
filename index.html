@@ -29,6 +29,30 @@ input.bit.c-bit {
   background-color: #fff3cd;   /* khác nhẹ A cho dễ phân biệt */
 }
 
+/* bit mask cơ bản */
+.mask-bit {
+  width: 26px;
+  height: 26px;
+  text-align: center;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #444;
+  background: #f8f9fa;
+  margin: 2px;
+}
+
+/* bit mask khi A # C = 1 */
+.mask-bit.mask-xor {
+  color: #1E90FF;          /* xanh dương rõ */
+  border-color: #1E90FF;
+  background: #E8F3FF;     /* nền xanh rất nhạt */
+}
+
+/* nhìn cho đỡ cứng */
+.mask-bit[readonly] {
+  cursor: default;
+}
 
 .bit-box {
   display: inline-block;
@@ -64,7 +88,7 @@ button {
 
 <body>
 
-<h3>60 dãy A (5 bit) - Lucky st3 </h3>
+<h3>60 dãy A (5 bit) - Lucky st4 </h3>
 
 <button onclick="copyAll()">Copy const FINAL_MASKS</button>
 <button onclick="resetAll()">Reset</button>
@@ -287,6 +311,7 @@ function resetAll() {
 
 </body>
 </html>
+
 
 
 
