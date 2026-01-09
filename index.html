@@ -86,7 +86,7 @@ button {
 
 <body>
 
-<h3>60 dãy A (5 bit) - Lucky st9 </h3>
+<h3>60 dãy A (5 bit) - Lucky St9 </h3>
 
 <button onclick="copyAll()">Copy const FINAL_MASKS</button>
 <button onclick="resetAll()">Reset</button>
@@ -268,7 +268,7 @@ function copyAll() {
   const text =
 `const FINAL_MASKS = [
 ${rows.map(group =>
-  `  [ ${group.map(m => `[${m.join(",")}]`).join(", ")} ],`
+  `   ${group.map(m => `[${m.join(",")}]`).join(", ")} `
 ).join("\n")}
 ];`;
 
@@ -307,6 +307,7 @@ function resetAll() {
 
 </body>
 </html>
+
 
 
 
