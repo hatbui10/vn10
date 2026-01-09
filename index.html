@@ -88,7 +88,7 @@ button {
 
 <body>
 
-<h3>60 dãy A (5 bit) - Lucky st5 </h3>
+<h3>60 dãy A (5 bit) - Lucky st6 </h3>
 
 <button onclick="copyAll()">Copy const FINAL_MASKS</button>
 <button onclick="resetAll()">Reset</button>
@@ -191,22 +191,22 @@ function calculateRow(row) {
     el.style.color = C[i] ? "red" : "#0096c7";
   });
 
- /* --- MASK SAU SỬA --- */
+/* --- MASK SAU SỬA --- */
 let newMask = baseMask.slice();
+let diffA2C1 = Array(5).fill(false);
 
 if (idx < 59) {
   const nextRow = tbody.rows[idx + 1];
   const nextInputs =
     nextRow.querySelectorAll("td:nth-child(2) input.bit");
 
-  /* chỉ xử lý khi A₂ đã nhập đủ */
   if ([...nextInputs].every(i => i.value !== "")) {
     const A_next = [...nextInputs].map(i => +i.value);
 
-    /* 🔑 SO SÁNH A₂ VỚI C₁ → sửa mask */
     for (let i = 0; i < 5; i++) {
       if (A_next[i] !== C[i]) {
-        newMask[i] ^= 1;
+        newMask[i] ^= 1;          // sửa mask
+        diffA2C1[i] = true;       // chỉ để tô màu
       }
     }
   } else {
@@ -218,15 +218,12 @@ if (idx < 59) {
   }
 }
 
-/* --- XOR A # C (CHỈ DÙNG ĐỂ TÔ MÀU) --- */
-const xorAC = A.map((b, i) => b ^ C[i]);
-
-/* --- LƯU & HIỂN THỊ --- */
+/* --- HIỂN THỊ MASK 2 --- */
 FINAL_MASKS[idx] = newMask.slice();
 
 row.querySelector(`#out-${idx}`).innerHTML =
   newMask.map((b, i) =>
-   `<input class="bit mask-bit ${xorAC[i] === 1 ? 'mask-xor' : ''}"
+   `<input class="bit mask-bit ${diffA2C1[i] ? 'mask-xor' : ''}"
           value="${b}" readonly>`
   ).join("");
 
@@ -312,6 +309,7 @@ function resetAll() {
 
 </body>
 </html>
+
 
 
 
