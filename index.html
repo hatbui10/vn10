@@ -25,9 +25,7 @@ input.bit {
 input.bit.c-bit {
   cursor: default;
 }
-  input.mask-bit {
-  background-color: #fff3cd;   /* khác nhẹ A cho dễ phân biệt */
-}
+ 
 
 /* bit mask cơ bản */
 .mask-bit {
@@ -42,12 +40,7 @@ input.bit.c-bit {
   margin: 2px;
 }
 
-/* bit mask khi A # C = 1 */
-.mask-bit.mask-xor {
-  color: #1E90FF;          /* xanh dương rõ */
-  border-color: #1E90FF;
-  background: #E8F3FF;     /* nền xanh rất nhạt */
-}
+
 
 /* nhìn cho đỡ cứng */
 .mask-bit[readonly] {
@@ -58,10 +51,15 @@ input.bit.c-bit {
   display: inline-block;
   width: 24px;
 }
-
-.changed {
-  background-color: yellow !important;
-  color: #fff !important;
+.mask-bit.mask-diff {
+  background: #1E90FF;   /* xanh */
+  color: #fff;
+  border-color: #1E90FF;
+}
+.mask-bit.mask-same {
+  background: #000;
+  color: #fff;
+  border-color: #000;
 }
 
 
@@ -88,7 +86,7 @@ button {
 
 <body>
 
-<h3>60 dãy A (5 bit) - Lucky st6 </h3>
+<h3>60 dãy A (5 bit) - Lucky st7 </h3>
 
 <button onclick="copyAll()">Copy const FINAL_MASKS</button>
 <button onclick="resetAll()">Reset</button>
@@ -201,19 +199,18 @@ if (idx < 59) {
     nextRow.querySelectorAll("td:nth-child(2) input.bit");
 
   if ([...nextInputs].every(i => i.value !== "")) {
-    const A_next = [...nextInputs].map(i => +i.value);
+    const A2 = [...nextInputs].map(i => +i.value);
 
     for (let i = 0; i < 5; i++) {
-      if (A_next[i] !== C[i]) {
-        newMask[i] ^= 1;          // sửa mask
-        diffA2C1[i] = true;       // chỉ để tô màu
+      if (A2[i] !== C[i]) {
+        newMask[i] ^= 1;      // sửa mask
+        diffA2C1[i] = true;   // đánh dấu để tô xanh
       }
     }
   } else {
     row.querySelector(`#out-${idx}`).innerHTML = "";
     document.getElementById(`txt-${idx}`).value = "";
     FINAL_MASKS[idx] = null;
-    highlightAMatchWithPrevC(idx);
     return;
   }
 }
@@ -223,15 +220,12 @@ FINAL_MASKS[idx] = newMask.slice();
 
 row.querySelector(`#out-${idx}`).innerHTML =
   newMask.map((b, i) =>
-   `<input class="bit mask-bit ${diffA2C1[i] ? 'mask-xor' : ''}"
+   `<input class="bit mask-bit ${diffA2C1[i] ? 'mask-diff' : 'mask-same'}"
           value="${b}" readonly>`
   ).join("");
 
 document.getElementById(`txt-${idx}`).value =
   `[${newMask.join(",")}],`;
-
-highlightAMatchWithPrevC(idx);
-highlightAMatchWithPrevC(idx + 1);
 }
 
 /* ===== SO SÁNH A2 vs C1 TRƯỚC TÌM BÍT TRÙNG ĐỂ TÔ MÀU===== */
@@ -309,14 +303,4 @@ function resetAll() {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
 
