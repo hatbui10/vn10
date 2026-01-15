@@ -139,6 +139,39 @@
     padding: clamp(2px, 0.8vw, 8px);
     box-sizing: border-box;
 }
+        @keyframes glowPulse {
+    0% {
+        box-shadow:
+            0 0 10px rgba(255, 215, 0, 0.4),
+            0 0 18px rgba(255, 183, 0, 0.4),
+            inset 0 0 6px rgba(0, 0, 0, 0.3);
+        text-shadow:
+            0 0 4px rgba(255, 0, 0, 0.6);
+        filter: brightness(1);
+    }
+
+    50% {
+        box-shadow:
+            0 0 18px rgba(255, 215, 0, 0.9),
+            0 0 35px rgba(255, 183, 0, 0.9),
+            inset 0 0 10px rgba(0, 0, 0, 0.2);
+        text-shadow:
+            0 0 10px rgba(255, 0, 0, 1),
+            0 0 18px rgba(255, 215, 0, 0.9);
+        filter: brightness(1.15);
+    }
+
+    100% {
+        box-shadow:
+            0 0 10px rgba(255, 215, 0, 0.4),
+            0 0 18px rgba(255, 183, 0, 0.4),
+            inset 0 0 6px rgba(0, 0, 0, 0.3);
+        text-shadow:
+            0 0 4px rgba(255, 0, 0, 0.6);
+        filter: brightness(1);
+    }
+}
+
 
         .display-label {
             text-align: center;
@@ -818,6 +851,7 @@ function resetDisplayAndReverse() {
     </script>
 </body>
 </html>
+
 
 
 
