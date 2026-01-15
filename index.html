@@ -1,330 +1,754 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>60 dãy A – Mask 5 bit</title>
-
-<style>
-body { font-family: Arial, sans-serif; padding: 10px; }
-table { border-collapse: collapse; width: 100%; max-width: 1800px; }
-th, td { border: 1px solid #ccc; padding: 4px; text-align: center; }
-
-input.bit {
-  width: 24px;
-  height: 24px;
-  font-size: 14px;
-  text-align: center;
-  margin: 0 1px;
-  background-color: yellow;
-  border: 1px solid #999;
-  border-radius: 8px;
-  font-weight: bold;
-}
-
-input.bit.c-bit {
-  cursor: default;
-}
- 
-
-/* bit mask cơ bản */
-.mask-bit {
-  width: 26px;
-  height: 26px;
-  text-align: center;
-  border: 1px solid #bbb;
-  border-radius: 4px;
-  font-weight: bold;
-  color: #444;
-  background: #f8f9fa;
-  margin: 2px;
-}
-
-
-
-/* nhìn cho đỡ cứng */
-.mask-bit[readonly] {
-  cursor: default;
-}
-
-.bit-box {
-  display: inline-block;
-  width: 24px;
-}
-.mask-bit.mask-diff {
-  background: #1E90FF;   /* xanh */
-  color: #fff;
-  border-color: #1E90FF;
-}
-.mask-bit.mask-same {
-  background: #000;
-  color: #fff;
-  border-color: #000;
-}
-
-
-.a-match {
-  background-color: red !important;
-  color: #fff !important;
-}
-
-textarea.row-output {
-  width: 100px;
-  height: 32px;
-  resize: none;
-  font-family: monospace;
-  font-size: 14px;
-}
-
-button {
-  margin: 6px 6px 12px 0;
-  padding: 8px 20px;
-  font-size: 16px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhập liệu nhị phân</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #4a148c 0%, #2c0743 50%, #1a0429 100%);
+            color: white;
+        }
+        
+        .container {
+            background: linear-gradient(135deg, #ff0040 0%, #cc0033 50%, #990026 100%);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 0, 64, 0.8), 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+        
+        .bit-index {
+            text-align: center;
+            font-size: 10px;
+            color: white;
+            margin-bottom: 2px;
+            font-weight: bold;
+        }
+        
+        .binary-inputs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .binary-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 50%, #c0c0c0 100%);
+            color: #333;
+        }
+        
+        .binary-input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+        }
+        
+        .binary-input.invalid {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+        }
+        
+        .bit-label {
+            text-align: center;
+            font-size: 12px;
+            color: white;
+            margin-top: 5px;
+        }
+        
+        .display-inputs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .display-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid rgba(0, 123, 255, 0.8);
+            border-radius: 5px;
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.6), inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .display-label {
+            text-align: center;
+            font-size: 10px;
+            color: white;
+            margin-top: 5px;
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%);
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .reverse-inputs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+        
+        .reverse-result {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 255, 136, 0.4) 100%);
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 136, 0.5);
+        }
+        
+        .reverse-input {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            border: 2px solid rgba(139, 0, 0, 0.8);
+            border-radius: 5px;
+            background: linear-gradient(135deg, #8b0000 0%, #660000 50%, #4d0000 100%);
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.6), inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .decimal-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.8);
+        }
+        
+        button {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            box-shadow: 0 2px 5px rgba(0,123,255,0.3);
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
+            box-shadow: 0 4px 10px rgba(0,123,255,0.5);
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        
+        .history-container {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff4500 50%, #cc3300 100%);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.8), 0 2px 10px rgba(0,0,0,0.3);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 600px;
+        }
+        
+        .history-title {
+            text-align: center;
+            color: white;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            flex-shrink: 0;
+        }
+        
+        .history-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .history-count {
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .history-input-count {
+            width: 60px;
+            padding: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .history-input-count:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .button-row button {
+            flex: 1;
+        }
+        
+        .history-list-container {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .history-list-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .history-list-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        .history-list-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        
+        .history-list-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        .history-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .history-inputs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+            justify-content: center;
+        }
+        
+        .history-input {
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 3px;
+            background: linear-gradient(135deg, #333333 0%, #222222 100%);
+            color: #ffffff;
+        }
+        
+        .history-input.highlight {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+        }
+        
+        .history-time {
+            text-align: center;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .clear-hist.export-btn {
+            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .clear-history-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+    .export-btn:hover {
+            background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+        }
+        
+        .clear-history-btn:hover {
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+        }
+    </style>
 </head>
-
 <body>
+    <div class="main-content">
+        <div class="container">
+            <h1>Nhập 8 bit nhị phân</h1>
+            
+            <div class="binary-inputs">
+                <div>
+                    <div class="bit-index">0</div>
+                    <input type="text" class="binary-input" maxlength="1" data-index="0" placeholder="0">
+                    <div class="bit-label">Bit 0</div>
+                </div>
+                <div>
+                    <div class="bit-index">1</div>
+                    <input type="text" class="binary-input" maxlength="1" data-index="1" placeholder="0">
+                    <div class="bit-label">Bit 1</div>
+                </div>
+                <div>
+                    <div class="bit-index">2</div>
+                    <input type="text" class="binary-input" maxlength="1" data-index="2" placeholder="0">
+                    <div class="bit-label">Bit 2</div>
+                </div>
+                <div>
+                    <div class="bit-index">3</div>
+                    <input type="text" class="binary-input" maxlength="1" data-index="3" placeholder="0">
+                    <div class="bit-label">Bit 3</div>
+                </div>
+                <div>
+                    <div class="bit-index">4</div>
+                    <input type="text" class="binary-input" maxlength="1" data-index="4" placeholder="0">
+                    <div class="bit-label">Bit 4</div>
+                </div>
+                <div>
+                    <div class="bit-index">5</div>
+                    <input type="text" class="binary-input" maxlength="1" data-index="5" placeholder="0">
+                    <div class="bit-label">Bit 5</div>
+                </div>
+                <div>
+                    <div class="bit-index">6</div>
+                    <input type="text" class="binary-input" maxlength="1" data-index="6" placeholder="0">
+                    <div class="bit-label">Bit 6</div>
+                </div>
+                <div>
+                    <div class="bit-index">7</div>
+                    <input type="text" class="binary-input" maxlength="1" data-index="7" placeholder="0">
+                    <div class="bit-label">Bit 7</div>
+                </div>
+            </div>
+            
+            <div class="display-inputs">
+                <div>
+                    <input type="text" class="display-input" readonly id="display-0">
+                </div>
+                <div>
+                    <input type="text" class="display-input" readonly id="display-1">
+                </div>
+                <div>
+                    <input type="text" class="display-input" readonly id="display-2">
+                </div>
+                <div>
+                    <input type="text" class="display-input" readonly id="display-3">
+                </div>
+                <div>
+                    <input type="text" class="display-input" readonly id="display-4">
+                </div>
+                <div>
+                    <input type="text" class="display-input" readonly id="display-5">
+                </div>
+                <div>
+                    <input type="text" class="display-input" readonly id="display-6">
+                </div>
+                <div>
+                    <input type="text" class="display-input" readonly id="display-7">
+                </div>
+            </div>
+            
+                        
+            <div class="reverse-result">
+                <h3 style="margin-top: 0; color: #00ff88;">Trrldtb Tcbcqtn Tmtltgbt Ltgcdmv 94 HBTx</h3>
+                <div class="reverse-inputs">
+                    <input type="text" class="reverse-input" readonly id="reverse-0">
+                    <input type="text" class="reverse-input" readonly id="reverse-1">
+                    <input type="text" class="reverse-input" readonly id="reverse-2">
+                    <input type="text" class="reverse-input" readonly id="reverse-3">
+                    <input type="text" class="reverse-input" readonly id="reverse-4">
+                </div>
+                <div>Giá trị đảo ngược: <span id="reverse-binary" style="color: #00ff88; font-weight: bold;">00000</span></div>
+            </div>
+            
+            <div class="button-group">
+              <button onclick="resetDisplayAndReverse()">Reset</button>
 
-<h3>60 dãy A (5 bit) - Lucky Star 9 </h3>
+                <button onclick="randomize()">Ngẫu nhiên</button>
+              
+                           </div>
+        </div>
+        
+        <div class="history-container">
+            <div class="history-title">Lịch sử nhập liệu</div>
+            <div class="history-info">
+                <span class="history-count">Đã lưu: <span id="current-count">0</span></span>
+                <input type="number" class="history-input-count" id="limit-input" placeholder="Giới hạn" min="1" max="1000" value="1000">
+            </div>
+            <div class="history-list-container" id="history-list"></div>
+            <div class="button-row">
+                <button class="export-btn" onclick="exportToExcel()">Xuất Excel</button>
+               <button onclick="clearHistory()">Xóa lịch sử</button>
 
-<button onclick="copyAll()">Copy Hbth Trrldtb Tcbcqtn Tmtltgbt Ltgcdmv 9420</button>
-<button onclick="resetAll()">Reset</button>
+            </div>
+        </div>
+    </div>
 
-<table>
-<thead>
-<tr>
-  <th>#</th>
-  <th> Nhập kết quả </th>
-  <th>Mask ban đầu</th>
-  <th>Lấy bít để Start</th>
-  <th>Mask đã nâng cấp</th>
-  <th>Chuỗi mask</th>
-</tr>
-</thead>
-<tbody id="rows"></tbody>
-</table>
+    <script>
+        // Lấy tất cả các ô input
+        const inputs = document.querySelectorAll('.binary-input');
+        const binaryResult = document.getElementById('binary-result');
+        const reverseBinary = document.getElementById('reverse-binary');
+        const historyList = document.getElementById('history-list');
+        const currentCountSpan = document.getElementById('current-count');
+        const limitInput = document.getElementById('limit-input');
+        
+        // Mảng lưu lịch sử
+        let history = [];
 
-<script>
-const MASKS = [
- "01101","11010","00001","11011","00001","10100",
-"11100","01101","11011","00000","10000","10110",
-"11000","00100","11100","11101","11001","01000",
-"11010","11111","00101","11000","11100","00111",
-"11000","01011","10000","01111","11110","00010",
-"00011","10001","01111","10100","01110","00000",
-"10100","00010","10000","11101","10100","00010",
-"00010","00100","00000","01101","00010","10000",
- "11101","00111","00100","01011","11001","11011",
-"10011","11111", "11100","00011","10110","01001",
+        // Hàm kiểm tra và chỉ cho phép nhập 0 hoặc 1
+        function validateInput(input) {
+            const value = input.value;
+            if (value !== '' && value !== '0' && value !== '1') {
+                input.value = '';
+                input.classList.add('invalid');
+                setTimeout(() => {
+                    input.classList.remove('invalid');
+                }, 500);
+                return false;
+            }
+            input.classList.remove('invalid');
+            return true;
+        }
+
+        // Hàm cập nhật kết quả
+        function updateResult() {
+            let binaryString = '';
+            inputs.forEach(input => {
+                binaryString += input.value || '0';
+            });
+            
+            // Cập nhật kết quả đảo ngược từ bit 3-7
+            updateReverseResult();
+            
+            // Kiểm tra xem ô 8 đã được nhập chưa để copy và reset
+            if (inputs[7].value) {
+                // Lưu lịch sử trước khi reset
+                autoSaveToHistory();
+                copyToDisplay();
+                resetInputs();
+            }
+        }
+        
+        // Hàm copy giá trị sang ô hiển thị
+        function copyToDisplay() {
+            inputs.forEach((input, index) => {
+                const displayInput = document.getElementById(`display-${index}`);
+                displayInput.value = input.value || '0';
+            });
+        }
+        
+        // Hàm reset ô input và focus vào ô đầu tiên
+        function resetInputs() {
+            inputs.forEach(input => {
+                input.value = '';
+            });
+            inputs[0].focus();
+        }
+        
+        // Hàm tự động lưu vào lịch sử
+        function autoSaveToHistory() {
+            let binaryString = '';
+            inputs.forEach(input => {
+                binaryString += input.value || '0';
+            });
+            
+            // Kiểm tra xem đã có giá trị này trong lịch sử chưa
+            const exists = history.some(item => item.bits === binaryString);
+            if (exists) return;
+            
+            // Tạo đối tượng lịch sử
+            const historyItem = {
+                bits: binaryString,
+                time: new Date().toLocaleTimeString('vi-VN')
+            };
+            
+            // Thêm vào đầu mảng
+            history.unshift(historyItem);
+            
+            // Giới hạn lịch sử theo giá trị input
+            const limit = parseInt(limitInput.value) || 1000;
+            if (history.length > limit) {
+                history = history.slice(0, limit);
+            }
+            
+            // Cập nhật hiển thị
+            updateHistoryDisplay();
+        }
+        
+        // Hàm cập nhật kết quả đảo ngược
+        function updateReverseResult() {
+            // Lấy giá trị từ bit 3-7 (index 3 đến 7) và đảo ngược giá trị
+            const reversedBits = [];
+            for (let i = 3; i <= 7; i++) {
+                const bit = inputs[i].value || '0';
+                // Đảo ngược giá trị: 0 -> 1, 1 -> 0
+                reversedBits.push(bit === '0' ? '1' : '0');
+            }
+            
+            // Hiển thị trong 5 ô kết quả
+            reversedBits.forEach((bit, index) => {
+                document.getElementById(`reverse-${index}`).value = bit;
+            });
+            
+            // Cập nhật chuỗi nhị phân đảo ngược
+            const reversedBinary = reversedBits.join('');
+            reverseBinary.textContent = reversedBinary;
+        }
+
+        // Thêm sự kiện cho mỗi ô input
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', function() {
+                if (validateInput(this)) {
+                    updateResult();
+                    // Tự động chuyển đến ô tiếp theo
+                    if (this.value && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                }
+            });
+
+            input.addEventListener('keydown', function(e) {
+                // Cho phép xóa và di chuyển giữa các ô
+                if (e.key === 'Backspace' && !this.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+                if (e.key === 'ArrowLeft' && index > 0) {
+                    inputs[index - 1].focus();
+                }
+                if (e.key === 'ArrowRight' && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            // Chỉ cho phép nhập số
+            input.addEventListener('keypress', function(e) {
+                const char = String.fromCharCode(e.which);
+                if (char !== '0' && char !== '1') {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Hàm xóa tất cả
+        function clearInputs() {
+            inputs.forEach(input => {
+                input.value = '';
+            });
+            // Cập nhật kết quả sau khi xóa
+            updateResult();
+            inputs[0].focus();
+        }
+
+        // Hàm tạo ngẫu nhiên
+        function randomize() {
+            inputs.forEach(input => {
+                input.value = Math.random() < 0.5 ? '0' : '1';
+            });
+            updateResult();
+        }
+
+        // Hàm đặt tất cả là 1
+        function setAllOn() {
+            inputs.forEach(input => {
+                input.value = '1';
+            });
+            updateResult();
+        }
+
+        // Hàm đặt tất cả là 0
+        function setAllOff() {
+            inputs.forEach(input => {
+                input.value = '0';
+            });
+            updateResult();
+        }
+
+        // Hàm lưu vào lịch sử
+        function saveToHistory() {
+            let binaryString = '';
+            inputs.forEach(input => {
+                binaryString += input.value || '0';
+            });
+            
+            // Tạo đối tượng lịch sử
+            const historyItem = {
+                bits: binaryString,
+                time: new Date().toLocaleTimeString('vi-VN')
+            };
+            
+            // Thêm vào đầu mảng
+            history.unshift(historyItem);
+            
+            // Giới hạn lịch sử tối đa 10 items
+            if (history.length > 10) {
+                history = history.slice(0, 10);
+            }
+            
+            // Cập nhật hiển thị
+            updateHistoryDisplay();
+        }
+        
+        // Hàm cập nhật hiển thị lịch sử
+        function updateHistoryDisplay() {
+            historyList.innerHTML = '';
+            
+            history.forEach((item, index) => {
+                const historyDiv = document.createElement('div');
+                historyDiv.className = 'history-item';
+                
+                // Tạo 8 ô input cho lịch sử, chỉ 3 ô đầu có màu highlight
+                let inputsHtml = '<div class="history-inputs">';
+                for (let i = 0; i < 8; i++) {
+                    const className = i < 3 ? 'history-input highlight' : 'history-input';
+                    inputsHtml += `<input type="text" class="${className}" readonly value="${item.bits[i] || '0'}">`;
+                }
+                inputsHtml += '</div>';
+                
+                // Thêm thời gian
+                inputsHtml += `<div class="history-time">${item.time}</div>`;
+                
+                historyDiv.innerHTML = inputsHtml;
+                historyList.appendChild(historyDiv);
+            });
+            
+            // Cập nhật số lượng hiện tại
+            currentCountSpan.textContent = history.length;
+        }
+        
+        // Hàm xóa lịch sử
+        function clearHistory() {
+            history = [];
+            updateHistoryDisplay();
+        }
+
+        // Hàm xuất ra Excel
+        function exportToExcel() {
+            if (history.length === 0) {
+                alert('Không có dữ liệu để xuất!');
+                return;
+            }
+            
+            // Tạo nội dung CSV - mỗi giá trị nhị phân trên 1 ô trong 1 cột
+            let csvContent = "Giá trị nhị phân\n";
+            
+            history.forEach((item, index) => {
+                csvContent += `"${item.bits}"\n`;
+            });
+            
+            // Tạo blob và download
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `lich_su_nhap_lieu_${new Date().toLocaleDateString('vi-VN').replace(/\//g, '-')}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Thêm sự kiện cho input giới hạn
+        limitInput.addEventListener('input', function() {
+            const value = parseInt(this.value) || 1000;
+            if (value < 1) this.value = 1;
+            if (value > 1000) this.value = 1000;
+            
+            // Cắt lịch sử nếu cần
+            if (history.length > value) {
+                history = history.slice(0, value);
+                updateHistoryDisplay();
+            }
+        });
 
 
- 
- 
-];
+function resetDisplayAndReverse() {
+    // Xóa ô copy (display)
+    for (let i = 0; i < 8; i++) {
+        const d = document.getElementById(`display-${i}`);
+        if (d) d.value = '';
+    }
 
-  const ROW_COUNT = MASKS.length;
-const FINAL_MASKS = Array(ROW_COUNT).fill(null);
-const tbody = document.getElementById("rows");
-
-/* ===== TẠO BẢNG ===== */
-for (let i = 0; i < ROW_COUNT; i++) {
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td>${i + 1}</td>
-    <td>
-      ${Array(5).fill(0).map(() =>
-        `<input class="bit" maxlength="1"
-         inputmode="numeric" pattern="[01]"
-         oninput="handleInput(this)">`
-      ).join("")}
-    </td>
-    <td>${MASKS[i].split("").map(b =>
-      `<span class="bit-box">${b}</span>`
-    ).join("")}</td>
-    <td id="c-${i}">
-      ${Array(5).fill(0).map(() =>
-        `<input class="bit c-bit" readonly>`
-      ).join("")}
-    </td>
-    <td id="out-${i}"></td>
-    <td><textarea class="row-output" id="txt-${i}" readonly></textarea></td>
-  `;
-  tbody.appendChild(tr);
-}
-
-/* ===== INPUT ===== */
-function handleInput(el) {
-  el.value = el.value.replace(/[^01]/g, "");
-
-  const row = el.closest("tr");
-  const inputs = [...row.querySelectorAll("td:nth-child(2) input.bit")];
-  const idx = inputs.indexOf(el);
-
-  if (el.value && idx < 4) inputs[idx + 1].focus();
-
-  if (inputs.every(i => i.value !== "")) {
-    calculateRow(row);
-    // 🔁 tính lại mask cho hàng trước (nếu có)
-const prevRow = row.previousElementSibling;
-if (prevRow) {
-  calculateRow(prevRow);
-}
-
-    row.nextElementSibling
-      ?.querySelector("td:nth-child(2) input.bit")
-      ?.focus();
-  }
-}
-
-/* ===== TÍNH HÀNG ===== */
-function calculateRow(row) {
-  const idx = row.rowIndex - 1;
-
-  /* --- A hàng hiện tại --- */
-  const A = [...row.querySelectorAll("td:nth-child(2) input.bit")]
-    .map(i => +i.value);
-if (!MASKS[idx]) return;
-  const baseMask = MASKS[idx].split("").map(Number);
-
-  /* --- C₁ = A₁ XOR mask gốc --- */
-  const C = A.map((b, i) => b ^ baseMask[i]);
-  row.querySelectorAll(".c-bit").forEach((el, i) => {
-    el.value = C[i];
-    el.style.color = C[i] ? "red" : "#0096c7";
-  });
-  const rowIdx = row.rowIndex - 1;
-highlightAMatchWithPrevC(rowIdx);
-
-/* --- MASK SAU SỬA --- */
-let newMask = baseMask.slice();
-let diffA2C1 = Array(5).fill(false);
-
-if (idx < ROW_COUNT - 1) {
-  const nextRow = tbody.rows[idx + 1];
-  const nextInputs =
-    nextRow.querySelectorAll("td:nth-child(2) input.bit");
-
-  if ([...nextInputs].every(i => i.value !== "")) {
-    const A2 = [...nextInputs].map(i => +i.value);
-
+    // Xóa ô đảo ngược
     for (let i = 0; i < 5; i++) {
-      if (A2[i] !== C[i]) {
-        newMask[i] ^= 1;      // sửa mask
-        diffA2C1[i] = true;   // đánh dấu để tô xanh
-      }
+        const r = document.getElementById(`reverse-${i}`);
+        if (r) r.value = '';
     }
-  } else {
-    row.querySelector(`#out-${idx}`).innerHTML = "";
-    document.getElementById(`txt-${idx}`).value = "";
-    FINAL_MASKS[idx] = null;
-    return;
-  }
+
+    // Reset chuỗi đảo ngược
+    reverseBinary.textContent = '00000';
+
+    // Xóa input chính
+    inputs.forEach(input => input.value = '');
+    inputs[0].focus();
 }
 
-/* --- HIỂN THỊ MASK 2 --- */
-FINAL_MASKS[idx] = newMask.slice();
-
-row.querySelector(`#out-${idx}`).innerHTML =
-  newMask.map((b, i) =>
-   `<input class="bit mask-bit ${diffA2C1[i] ? 'mask-diff' : 'mask-same'}"
-          value="${b}" readonly>`
-  ).join("");
-
-document.getElementById(`txt-${idx}`).value =
-  `[${newMask.join(",")}],`;
- 
-
-}
-
-/* ===== SO SÁNH A2 vs C1 TRƯỚC TÌM BÍT TRÙNG ĐỂ TÔ MÀU===== */
-function highlightAMatchWithPrevC(idx) {
-  if (idx <= 0 || idx >= 60) return;
-
-  const row = tbody.rows[idx];
-  const prevRow = tbody.rows[idx - 1];
-  const A_inputs = row.querySelectorAll("td:nth-child(2) input.bit");
-  const C_prev = [...prevRow.querySelectorAll(".c-bit")].map(i => i.value);
-
-  A_inputs.forEach((input, i) => {
-    input.classList.remove("a-match");
-    if (
-  input.value !== "" &&
-  C_prev[i] !== "" &&
-  input.value === C_prev[i]
-) {
-
-      input.classList.add("a-match");
-    }
-  });
-}
-
-async function copyAll() {
-  // 1️⃣ Lấy tất cả mask hợp lệ (không null)
-  const validMasks = FINAL_MASKS.filter(m => m !== null);
-
-  // 2️⃣ Không có gì để copy
-  if (validMasks.length === 0) {
-    alert("❌ Không có mask hợp lệ để copy");
-    return;
-  }
-
-  // 3️⃣ Chia thành các hàng, mỗi hàng 6 mask
-  const rows = [];
-  for (let i = 0; i < validMasks.length; i += 6) {
-    rows.push(validMasks.slice(i, i + 6));
-  }
-
-  // 4️⃣ Tạo text copy
-  const text =
-`const FINAL_MASKS = [
-${rows
-  .map(r => `  "${r.map(m => m.join("")).join('","')}"`)
-  .join(",\n")}
-];`;
-
-  // 5️⃣ Copy + thông báo kết quả
-  try {
-    await navigator.clipboard.writeText(text);
-    alert(`✅ Đã copy thành công (${validMasks.length} mask)`);
-  } catch (err) {
-    console.error(err);
-    alert("❌ Copy thất bại – trình duyệt chặn clipboard");
-  }
-}
-
-
-
-function resetAll() {
-  // xóa value
-  document.querySelectorAll("input.bit").forEach(i => {
-    i.value = "";
-    i.classList.remove("a-match"); // 🔑 QUAN TRỌNG
-  });
-
-  // xóa C
-  document.querySelectorAll(".c-bit").forEach(i => {
-    i.value = "";
-    i.style.color = "";
-  });
-
-  // xóa mask hiển thị
-  document.querySelectorAll("td[id^='out-']").forEach(td => td.innerHTML = "");
-
-  // xóa textarea
-  document.querySelectorAll("textarea").forEach(t => t.value = "");
-
-  // xóa data
-  FINAL_MASKS.fill(null);
-
-  // nếu có localStorage
-  localStorage.removeItem("FINAL_MASKS");
-}
-
-</script>
-
+        // Khởi tạo
+        updateResult();
+        inputs[0].focus();
+    </script>
 </body>
 </html>
-
-
 
