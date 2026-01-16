@@ -93,7 +93,7 @@
             width: 40px;
             height: 40px;
             background-color: yellow;
-            color: #fff;
+            color: #333;
             border: 2px solid #333;
             border-radius: 8px;
             text-align: center;
@@ -314,23 +314,23 @@
                 <div class="bit-label">Bit 7</div>
             </div>
             <div>
-                <input type="text" class="bit-input purple" maxlength="1" id="bit8" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input" maxlength="1" id="bit8" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 8</div>
             </div>
             <div>
-                <input type="text" class="bit-input purple" maxlength="1" id="bit9" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input" maxlength="1" id="bit9" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 9</div>
             </div>
             <div>
-                <input type="text" class="bit-input purple" maxlength="1" id="bit10" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input" maxlength="1" id="bit10" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 10</div>
             </div>
             <div>
-                <input type="text" class="bit-input purple" maxlength="1" id="bit11" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input" maxlength="1" id="bit11" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 11</div>
             </div>
             <div>
-                <input type="text" class="bit-input purple" maxlength="1" id="bit12" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input" maxlength="1" id="bit12" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 12</div>
             </div>
         </div>
@@ -925,36 +925,73 @@
 }
 
 
-    const inputGate = document.getElementById('bit7');
-    const inputGate3 = document.getElementById('bit3');
-    const inputGate4 = document.getElementById('bit4');
-    inputGate.focus();
+const inputGate  = document.getElementById('bit7');
+const inputGate3 = document.getElementById('bit3');
+const inputGate4 = document.getElementById('bit4');
+const inputGate8  = document.getElementById('bit8');
+const inputGate9 = document.getElementById('bit9');
+const inputGate10 = document.getElementById('bit10');
+const inputGate11 = document.getElementById('bit11');
+const inputGate12 = document.getElementById('bit12');
 
-    inputGate.addEventListener('keyup', () => {
-      const v = inputGate.value;
-      if (v !== '0' && v !== '1') {
-        inputGate.value = '';
-        return;
-      }
-      shiftAll(v);
-      increaseTopRow();
-      inputGate.value = '';
-      inputGate.focus();
-      updateRedZeros();
-      checkMatchingRows();
-    });
 
-    function shiftAll(newBit) {
-      for (let i = bitChain.length - 1; i > 0; i--) {
-        document.getElementById(bitChain[i]).value =
-          document.getElementById(bitChain[i - 1]).value;
-      }
-      document.getElementById(bitChain[0]).value = newBit;
+// Danh sách các bit được phép nhập
+const openInputs = [inputGate, inputGate3, inputGate4,inputGate8,inputGate9 ,inputGate10, inputGate11 ,inputGate12    ];
+
+// Khóa / mở input theo danh sách trên
+document.querySelectorAll('.bit-input').forEach(el => {
+  el.readOnly = !openInputs.includes(el);
+});
+
+// Focus mặc định vào bit 7
+inputGate.focus();
+
+// Xử lý nhập cho bit 7
+inputGate.addEventListener('keyup', () => {
+  const v = inputGate.value;
+
+  if (v !== '0' && v !== '1') {
+    inputGate.value = '';
+    return;
+  }
+
+  shiftAll(v);
+  increaseTopRow();
+  inputGate.value = '';
+  inputGate.focus();
+  updateRedZeros();
+  checkMatchingRows();
+});
+
+// Dịch chuỗi bit
+function shiftAll(newBit) {
+  for (let i = bitChain.length - 1; i > 0; i--) {
+    document.getElementById(bitChain[i]).value =
+      document.getElementById(bitChain[i - 1]).value;
+  }
+  document.getElementById(bitChain[0]).value = newBit;
+}
+
+function autoFocusNext(current, next) {
+  current.addEventListener('keyup', () => {
+    const v = current.value;
+
+    if (v !== '0' && v !== '1') {
+      current.value = '';
+      return;
     }
 
-    document.querySelectorAll('.bit-input').forEach(el => {
-      if (el !== inputGate && el !== inputGate3 && el !== inputGate4 ) el.readOnly = true;
-    });
+    next.focus();
+    next.select();
+  });
+}
+autoFocusNext(inputGate8,  inputGate9);
+autoFocusNext(inputGate9,  inputGate10);
+autoFocusNext(inputGate10, inputGate11);
+autoFocusNext(inputGate11, inputGate12);
+
+// nếu muốn vòng lại bit7
+// autoFocusNext(inputGate12, inputGate);
 
     function updateRedZeros() {
       ['bit0', 'bit1', 'bit2'].forEach(id => {
@@ -1123,6 +1160,7 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
 
 
 
