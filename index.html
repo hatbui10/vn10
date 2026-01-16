@@ -142,41 +142,34 @@
   border-color: #ff3b3b !important;
 }
 
-/* Nhấp nháy dữ dội khi trùng */
-@keyframes blinkStrong {
+/* Nhấp nháy dịu – long lanh nhẹ nhàng */
+@keyframes blinkSoft {
   0% {
-    box-shadow: 0 0 5px red;
-    background: #ff0000;
+    box-shadow: 0 0 6px rgba(255, 80, 80, 0.4);
+    background: #ff6b6b;
     transform: scale(1);
   }
-  25% {
-    box-shadow: 0 0 35px red, 0 0 15px orange;
-    background: #ff3b3b;
-    transform: scale(1.05);
-  }
   50% {
-    box-shadow: 0 0 60px red, 0 0 25px yellow;
-    background: #ff0000;
-    transform: scale(0.95);
-  }
-  75% {
-    box-shadow: 0 0 35px red, 0 0 15px orange;
-    background: #ff3b3b;
-    transform: scale(1.05);
+    box-shadow: 
+      0 0 18px rgba(255, 120, 120, 0.7),
+      0 0 30px rgba(255, 200, 200, 0.4);
+    background: #ff8f8f;
+    transform: scale(1.03);
   }
   100% {
-    box-shadow: 0 0 5px red;
-    background: #ff0000;
+    box-shadow: 0 0 6px rgba(255, 80, 80, 0.4);
+    background: #ff6b6b;
     transform: scale(1);
   }
 }
 
 .blink {
   color: #fff;
-  font-weight: 900;
-  text-shadow: 0 0 6px #000;
-  animation: blinkStrong 0.45s infinite;
+  font-weight: 700;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  animation: blinkSoft 1.2s ease-in-out infinite;
 }
+
 
     </style>
 </head>
@@ -1099,6 +1092,7 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
 
 
 
