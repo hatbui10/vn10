@@ -143,29 +143,29 @@
 }
 
 /* Nhấp nháy dịu – long lanh nhẹ nhàng */
-/* Tim vàng đỏ – lung linh nhẹ */
-@keyframes blinkHeartWarm {
+/* Tim vàng đỏ – đều, mượt, không lag */
+@keyframes blinkHeartSmooth {
   0% {
     background: linear-gradient(135deg, #ff6b6b, #ffc36a);
     box-shadow:
-      0 0 6px rgba(255, 120, 120, 0.4),
-      0 0 12px rgba(255, 200, 120, 0.35);
+      0 0 10px rgba(255, 120, 120, 0.45),
+      0 0 18px rgba(255, 200, 120, 0.4);
     transform: scale(1);
   }
 
   50% {
-    background: linear-gradient(135deg, #ff8f8f, #ffd98a);
+    background: linear-gradient(135deg, #ff7f7f, #ffd48a);
     box-shadow:
-      0 0 16px rgba(255, 120, 120, 0.6),
-      0 0 30px rgba(255, 210, 140, 0.55);
-    transform: scale(1.035);
+      0 0 20px rgba(255, 120, 120, 0.6),
+      0 0 32px rgba(255, 210, 140, 0.55);
+    transform: scale(1.02);
   }
 
   100% {
     background: linear-gradient(135deg, #ff6b6b, #ffc36a);
     box-shadow:
-      0 0 6px rgba(255, 120, 120, 0.4),
-      0 0 12px rgba(255, 200, 120, 0.35);
+      0 0 10px rgba(255, 120, 120, 0.45),
+      0 0 18px rgba(255, 200, 120, 0.4);
     transform: scale(1);
   }
 }
@@ -173,8 +173,9 @@
 .blink {
   color: #fff;
   font-weight: 700;
-  text-shadow: 0 0 4px rgba(120, 0, 0, 0.4);
-  animation: blinkHeartWarm 1.4s ease-in-out infinite;
+  text-shadow: 0 0 4px rgba(120, 0, 0, 0.35);
+  animation: blinkHeartSmooth 1.6s linear infinite;
+  will-change: transform, box-shadow;
 }
 
 
@@ -1100,6 +1101,7 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
 
 
 
