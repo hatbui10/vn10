@@ -778,9 +778,9 @@
             </div>
         </div>
         
-        <button onclick="convertToDecimal()">Chuyển sang Thập Phân</button>
+      
         <button onclick="clearAll()">Xóa Tất Cả</button>
-        <button onclick="checkMatchingRows()">Kiểm Tra Trùng Khớp</button>
+      
         
         <div class="result" id="result"></div>
     </div>
@@ -917,10 +917,31 @@ function checkMatchingRows() {
   output.classList.add('blink');
 }
 }
+          function clearAll() {
+  // 1. Xóa toàn bộ giá trị input
+  document.querySelectorAll('.bit-input').forEach(el => {
+    el.value = '';
+  });
+
+  // 2. Xóa toàn bộ hiệu ứng nhấp nháy / flash
+  document.querySelectorAll('.blink, .flash').forEach(el => {
+    el.classList.remove('blink', 'flash');
+  });
+
+  // 3. Xóa kết quả (nếu có dùng)
+  const result = document.getElementById('result');
+  if (result) result.textContent = '';
+
+  // 4. Focus lại ô nhập chính
+  inputGate.value = '';
+  inputGate.focus();
+}
+
 </script>
 
 </body>
 </html>
+
 
 
 
