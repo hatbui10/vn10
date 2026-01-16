@@ -926,6 +926,8 @@
 
 
     const inputGate = document.getElementById('bit7');
+    const inputGate3 = document.getElementById('bit3');
+    const inputGate4 = document.getElementById('bit4');
     inputGate.focus();
 
     inputGate.addEventListener('keyup', () => {
@@ -951,7 +953,7 @@
     }
 
     document.querySelectorAll('.bit-input').forEach(el => {
-      if (el !== inputGate) el.readOnly = true;
+      if (el !== inputGate && el !== inputGate3 && el !== inputGate4 ) el.readOnly = true;
     });
 
     function updateRedZeros() {
@@ -1121,6 +1123,7 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
 
 
 
