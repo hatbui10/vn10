@@ -1024,25 +1024,36 @@ function checkMatchingRows() {
   output.classList.add('blink');
 }
 }
+function clearAllNums() {
+  for (let i = 0; i <= 12; i++) {
+    const el = document.getElementById(`num${i}`);
+    if (el) el.value = '';
+  }
+}
+
 function clearAll() {
-  // 1. Xóa toàn bộ giá trị input
+  // 1. Xóa toàn bộ bit
   document.querySelectorAll('.bit-input').forEach(el => {
     el.value = '';
   });
 
-  // 2. Xóa toàn bộ hiệu ứng nhấp nháy / flash
+  // 2. Xóa toàn bộ num (HÀNG 0)
+  clearAllNums();
+
+  // 3. Xóa hiệu ứng
   document.querySelectorAll('.blink, .flash').forEach(el => {
     el.classList.remove('blink', 'flash');
   });
 
-  // 3. Xóa kết quả (nếu có dùng)
+  // 4. Xóa kết quả
   const result = document.getElementById('result');
   if (result) result.textContent = '';
 
-  // 4. Focus lại ô nhập chính
+  // 5. Focus lại bit7
   inputGate.value = '';
   inputGate.focus();
 }
+
 
 function updateTopRowFromNum6() {
   const baseEl = document.getElementById('num6');
@@ -1088,4 +1099,5 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
 
