@@ -143,22 +143,29 @@
 }
 
 /* Nhấp nháy dịu – long lanh nhẹ nhàng */
-@keyframes blinkSoft {
+/* Tim vàng đỏ – lung linh nhẹ */
+@keyframes blinkHeartWarm {
   0% {
-    box-shadow: 0 0 6px rgba(255, 80, 80, 0.4);
-    background: #ff6b6b;
+    background: linear-gradient(135deg, #ff6b6b, #ffc36a);
+    box-shadow:
+      0 0 6px rgba(255, 120, 120, 0.4),
+      0 0 12px rgba(255, 200, 120, 0.35);
     transform: scale(1);
   }
+
   50% {
-    box-shadow: 
-      0 0 18px rgba(255, 120, 120, 0.7),
-      0 0 30px rgba(255, 200, 200, 0.4);
-    background: #ff8f8f;
-    transform: scale(1.03);
+    background: linear-gradient(135deg, #ff8f8f, #ffd98a);
+    box-shadow:
+      0 0 16px rgba(255, 120, 120, 0.6),
+      0 0 30px rgba(255, 210, 140, 0.55);
+    transform: scale(1.035);
   }
+
   100% {
-    box-shadow: 0 0 6px rgba(255, 80, 80, 0.4);
-    background: #ff6b6b;
+    background: linear-gradient(135deg, #ff6b6b, #ffc36a);
+    box-shadow:
+      0 0 6px rgba(255, 120, 120, 0.4),
+      0 0 12px rgba(255, 200, 120, 0.35);
     transform: scale(1);
   }
 }
@@ -166,9 +173,10 @@
 .blink {
   color: #fff;
   font-weight: 700;
-  text-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
-  animation: blinkSoft 1.2s ease-in-out infinite;
+  text-shadow: 0 0 4px rgba(120, 0, 0, 0.4);
+  animation: blinkHeartWarm 1.4s ease-in-out infinite;
 }
+
 
 
     </style>
@@ -1092,6 +1100,7 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
 
 
 
