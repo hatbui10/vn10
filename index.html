@@ -220,8 +220,9 @@
 
     <!-- Số 4 -->
     <div style="grid-column: 6">
-        <input type="text" class="number-input" maxlength="3" id="num6">
-       
+        <input type="text" class="number-input" maxlength="3" id="num6" oninput="updateTopRowFromNum6()">
+      
+
     </div>
 
    
@@ -861,6 +862,17 @@
         bitChain.push(`bit${b}${r === 1 ? '' : '_' + r}`);
       }
     }
+    
+    function increaseTopRow() {
+  for (let i = 0; i <= 6; i++) {
+    const el = document.getElementById(`num${i}`);
+    if (!el) continue;
+    let v = parseInt(el.value, 10);
+    if (isNaN(v)) v = 0;
+    el.value = v + 1;
+  }
+}
+
 
     const inputGate = document.getElementById('bit7');
     inputGate.focus();
@@ -872,6 +884,7 @@
         return;
       }
       shiftAll(v);
+      increaseTopRow();
       inputGate.value = '';
       inputGate.focus();
       updateRedZeros();
@@ -1002,10 +1015,48 @@ function clearAll() {
   inputGate.focus();
 }
 
+let num6FocusTimer = null;
+
+function updateTopRowFromNum6() {
+  console.log('updateTopRowFromNum6 RUN');
+
+  const baseEl = document.getElementById('num6');
+  const base = parseInt(baseEl.value, 10);
+  if (isNaN(base)) return;
+
+  // tính các num khác
+  for (let i = 0; i < 8; i++) {
+    const el = document.getElementById(`num${i}`);
+    if (!el) continue;
+    el.value = base - (6 - i);
+  }
+
+  // ❗ reset timer cũ
+  clearTimeout(num6FocusTimer);
+
+  // ⏳ đợi 2 giây sau khi NGỪNG GÕ
+  num6FocusTimer = setTimeout(() => {
+    const bit7 = document.getElementById('bit7');
+    if (bit7) {
+      bit7.focus();
+      bit7.select();
+      console.log('FOCUS bit7');
+    }
+  }, 2000);
+}
+window.addEventListener('load', () => {
+    const num6 = document.getElementById('num6');
+    if (num6) {
+      num6.focus();
+      num6.select(); // nếu muốn bôi đen sẵn
+    }
+  });
 </script>
 
 </body>
 </html>
+
+
 
 
 
