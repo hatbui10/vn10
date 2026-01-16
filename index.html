@@ -3,865 +3,880 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhập liệu nhị phân</title>
+    <title>Hộp A - Nhập Bit Nhị Phân</title>
     <style>
-       body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 10px 20px;
-    min-height: 100vh;
-  
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(
-        135deg,
-        #4a148c 0%,
-        #2c0743 50%,
-        #1a0429 100%
-    );
-    color: white;
-}
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
         
         .container {
-            background: linear-gradient(135deg, #ff0040 0%, #cc0033 50%, #990026 100%);
+            text-align: center;
+            border: 3px solid #333;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 0, 64, 0.8), 0 2px 10px rgba(0,0,0,0.3);
-            text-align: center;
-
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         h1 {
-            text-align: center;
-            color: white;
+            color: #333;
             margin-bottom: 30px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
         
-        .bit-index {
-            text-align: center;
-            font-size: 10px;
+        .binary-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+        
+        .row-number {
+            width: 30px;
+            height: 40px;
+            background-color: #333;
             color: white;
-            margin-bottom: 2px;
-            font-weight: bold;
-        }
-        
-        .binary-inputs {
-           display: grid;
-           grid-template-columns: repeat(8, 1fr);
-           gap: clamp(4px, 1vw, 10px);
-           width: 100%; 
-          margin-bottom: 30px; 
-        }
-    
-    .binary-inputs > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-        
-        .binary-input {
-            
-            height: 50px;
+            border: 2px solid #333;
+            border-radius: 8px;
             text-align: center;
-            
+            font-size: 16px;
             font-weight: bold;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            margin-top: 0;
+        }
+        
+        .binary-row > div:nth-child(4) {
+            margin-right: 50px;
+        }
+        
+        .binary-row > div:nth-child(9) {
+            margin-right: 100px;
+        }
+        
+        .bit-input.purple {
+            background-color: purple;
+            color: white;
+        }
+        
+        .bit-input {
+            width: 40px;
+            height: 40px;
+            background-color: yellow;
+            color: red;
+            border: 2px solid #333;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
             text-transform: uppercase;
-          background: #6E026F;
-           color: #fff;             
-            width: 100%;
-      
-                text-align: center;
-                padding: clamp(2px, 0.8vw, 8px);
-                font-size: clamp(20px, 2vw, 24px);
-                box-sizing: border-box;
         }
         
-        .binary-input:focus {
-            border-color: #007bff;
+        .bit-input:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
-        }
-        
-        .binary-input.invalid {
-            border-color: #dc3545;
-            background-color: #f8d7da;
+            border-color: #0066cc;
+            box-shadow: 0 0 5px rgba(0, 102, 204, 0.5);
         }
         
         .bit-label {
-            text-align: center;
             font-size: 12px;
-            color: white;
-            margin-top: 5px;
-        }
-        
-        .display-inputs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: center;
-        }
-        
-        .display-input {
-            width: 100%;
-            height: 50px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            border: 2px solid rgba(0, 123, 255, 0.8);
-            border-radius: 5px;
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: #ffffff;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 15px rgba(0, 123, 255, 0.6), inset 0 0 10px rgba(0, 0, 0, 0.3);
-              
-            text-transform: uppercase;
-            padding: clamp(2px, 0.8vw, 8px);
-                box-sizing: border-box;}
-
-        .display-label {
-            text-align: center;
-            font-size: 10px;
-            color: white;
+            color: #666;
             margin-top: 5px;
         }
         
         .result {
             margin-top: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%);
-            border-radius: 5px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .reverse-inputs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            justify-content: center;
-        }
-        
-        .reverse-result {
-            margin-top: 20px;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 255, 136, 0.4) 100%);
-            border-radius: 5px;
-            text-align: center;
-            border: 1px solid rgba(0, 255, 136, 0.5);
-        }
-        
-        .reverse-input {
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-
-    border: 2px solid #ffcc00;
-    border-radius: 6px;
-
-    background: linear-gradient(
-        135deg,
-        #ff4d4d 0%,
-        #ff0000 50%,
-        #b30000 100%
-    );
-
-    color: #fff7cc;
-
-    text-shadow:
-        0 0 6px rgba(255, 255, 255, 0.9),
-        0 0 10px rgba(255, 215, 0, 0.8);
-
-    box-shadow:
-        0 0 10px rgba(255, 0, 0, 0.6),
-        0 0 20px rgba(255, 215, 0, 0.6),
-        inset 0 0 6px rgba(0, 0, 0, 0.35);
-
-    animation: reverseGlow 1.4s ease-in-out infinite;
-}
-@keyframes reverseGlow {
-    0% {
-        box-shadow:
-            0 0 8px rgba(255, 0, 0, 0.4),
-            0 0 14px rgba(255, 215, 0, 0.4),
-            inset 0 0 6px rgba(0, 0, 0, 0.35);
-        filter: brightness(1);
-    }
-
-    50% {
-        box-shadow:
-            0 0 16px rgba(255, 0, 0, 0.9),
-            0 0 28px rgba(255, 215, 0, 0.9),
-            inset 0 0 8px rgba(0, 0, 0, 0.25);
-        filter: brightness(1.2);
-    }
-
-    100% {
-        box-shadow:
-            0 0 8px rgba(255, 0, 0, 0.4),
-            0 0 14px rgba(255, 215, 0, 0.4),
-            inset 0 0 6px rgba(0, 0, 0, 0.35);
-        filter: brightness(1);
-    }
-}
-animation: reverseGlow 2s ease-in-out infinite;
-
-        
-        .decimal-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #00ff88;
-            text-shadow: 0 0 8px rgba(0, 255, 136, 0.8);
+            font-size: 18px;
+            color: #333;
         }
         
         button {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            background-color: #4CAF50;
             color: white;
-            border: none;
             padding: 10px 20px;
-            border-radius: 5px;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            margin: 10px;
-            box-shadow: 0 2px 5px rgba(0,123,255,0.3);
+            margin-top: 20px;
         }
         
         button:hover {
-            background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
-            box-shadow: 0 4px 10px rgba(0,123,255,0.5);
+            background-color: #45a049;
         }
-        
-        .main-content {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    width: 50%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-        @media (max-width: 768px) {
-    .main-content {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .container,
-    .history-container {
-        width: 100%;
-    }
+       
+       /* 3 ô đầu hàng 1 luôn đỏ */
+.fixed-red {
+  background-color: #b00000 !important;
+  color: white !important;
+  border-color: #ff3b3b !important;
 }
 
-        .history-container {
-            background: linear-gradient(135deg, #ff6b35 0%, #ff4500 50%, #cc3300 100%);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 107, 53, 0.8), 0 2px 10px rgba(0,0,0,0.3);
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            max-height: 600px;
-        }
-        
-        .history-title {
-            text-align: center;
-            color: white;
-            margin-bottom: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-            flex-shrink: 0;
-        }
-        
-        .history-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 8px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .history-count {
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        .history-input-count {
-            width: 60px;
-            padding: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 12px;
-            text-align: center;
-        }
-        
-        .history-input-count:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-        
-        .button-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .button-row button {
-            flex: 1;
-        }
-        
-        .history-list-container {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .history-list-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .history-list-container::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-        
-        .history-list-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-        }
-        
-        .history-list-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-        
-        .history-item {
-            margin-bottom: 10px;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .history-inputs {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 5px;
-            justify-content: center;
-        }
-        
-        .history-input {
-            width: 25px;
-            height: 25px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 3px;
-            background: linear-gradient(135deg, #333333 0%, #222222 100%);
-            color: #ffffff;
-        }
-        
-        .history-input.highlight {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: #ffffff;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
-        }
-        
-        .history-time {
-            text-align: center;
-            font-size: 10px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .clear-hist.export-btn {
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        
-        .clear-history-btn {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-    .export-btn:hover {
-            background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
-        }
-        
-        .clear-history-btn:hover {
-            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
-        }
+/* Nhấp nháy dữ dội khi trùng */
+@keyframes blinkStrong {
+  0% {
+    box-shadow: 0 0 5px red;
+    background: #ff0000;
+    transform: scale(1);
+  }
+  25% {
+    box-shadow: 0 0 35px red, 0 0 15px orange;
+    background: #ff3b3b;
+    transform: scale(1.05);
+  }
+  50% {
+    box-shadow: 0 0 60px red, 0 0 25px yellow;
+    background: #ff0000;
+    transform: scale(0.95);
+  }
+  75% {
+    box-shadow: 0 0 35px red, 0 0 15px orange;
+    background: #ff3b3b;
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 5px red;
+    background: #ff0000;
+    transform: scale(1);
+  }
+}
+
+.blink {
+  color: #fff;
+  font-weight: 900;
+  text-shadow: 0 0 6px #000;
+  animation: blinkStrong 0.45s infinite;
+}
+
     </style>
 </head>
 <body>
-    <div class="main-content">
-        <div class="container">
-            <h1>Nhập 8 bit nhị phân</h1>
-            
-            <div class="binary-inputs">
-                <div>
-                    <div class="bit-index">0</div>
-                    <input type="text" class="binary-input" maxlength="1" data-index="0" placeholder="0">
-                    
-                </div>
-                <div>
-                    <div class="bit-index">1</div>
-                    <input type="text" class="binary-input" maxlength="1" data-index="1" placeholder="0">
-                   
-                </div>
-                <div>
-                    <div class="bit-index">2</div>
-                    <input type="text" class="binary-input" maxlength="1" data-index="2" placeholder="0">
-                    
-                </div>
-                <div>
-                    <div class="bit-index">3</div>
-                    <input type="text" class="binary-input" maxlength="1" data-index="3" placeholder="0">
-                   
-                </div>
-                <div>
-                    <div class="bit-index">4</div>
-                    <input type="text" class="binary-input" maxlength="1" data-index="4" placeholder="0">
-                   
-                </div>
-                <div>
-                    <div class="bit-index">5</div>
-                    <input type="text" class="binary-input" maxlength="1" data-index="5" placeholder="0">
-                   
-                </div>
-                <div>
-                    <div class="bit-index">6</div>
-                    <input type="text" class="binary-input" maxlength="1" data-index="6" placeholder="0">
-                    
-                </div>
-                <div>
-                    <div class="bit-index">7</div>
-                    <input type="text" class="binary-input" maxlength="1" data-index="7" placeholder="0">
-                    
-                </div>
+    <div class="container">
+        <h1>HỘP A - NHẬP BIT NHỊ PHÂN</h1>
+        
+        <div class="binary-row">
+            <div class="row-number">1</div>
+            <div>
+                <input type="text" class="bit-input fixed-red" maxlength="1" id="bit0" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 0</div>
             </div>
-            
-            <div class="display-inputs">
-                <div>
-                    <div class="bit-label">Bit 0</div>
-                    <input type="text" class="display-input" readonly id="display-0">
-                </div>
-                <div>
-                     <div class="bit-label">Bit 1</div>
-                    <input type="text" class="display-input" readonly id="display-1">
-                </div>
-                <div>
-                    <div class="bit-label">Bit 2</div>
-                    <input type="text" class="display-input" readonly id="display-2">
-                </div>
-                <div>
-                     <div class="bit-label">Bit 3</div>
-                    <input type="text" class="display-input" readonly id="display-3">
-                </div>
-                <div>
-                     <div class="bit-label">Bit 4</div>
-                    <input type="text" class="display-input" readonly id="display-4">
-                </div>
-                <div>
-                      <div class="bit-label">Bit 5</div>
-                    <input type="text" class="display-input" readonly id="display-5">
-                </div>
-                <div>
-                    <div class="bit-label">Bit 6</div>
-                    <input type="text" class="display-input" readonly id="display-6">
-                </div>
-                <div>
-                    <div class="bit-label">Bit 7</div>
-                    <input type="text" class="display-input" readonly id="display-7">
-                </div>
+            <div>
+                <input type="text" class="bit-input fixed-red" maxlength="1" id="bit1" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 1</div>
             </div>
-            
-                        
-            <div class="reverse-result">
-                <h3 style="margin-top: 0; color: #00ff88;">Trrldtb Tcbcqtn Tmtltgbt Ltgcdmv 94 HBTx</h3>
-                <div class="reverse-inputs">
-                    <input type="text" class="reverse-input" readonly id="reverse-0">
-                    <input type="text" class="reverse-input" readonly id="reverse-1">
-                    <input type="text" class="reverse-input" readonly id="reverse-2">
-                    <input type="text" class="reverse-input" readonly id="reverse-3">
-                    <input type="text" class="reverse-input" readonly id="reverse-4">
-                </div>
-                <div>Giá trị đảo ngược: <span id="reverse-binary" style="color: #00ff88; font-weight: bold;">00000</span></div>
+            <div>
+                <input type="text" class="bit-input fixed-red" maxlength="1" id="bit2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 2</div>
             </div>
-            
-            <div class="button-group">
-              <button onclick="resetDisplayAndReverse()">Reset</button>
-
-                <button onclick="randomize()">Ngẫu nhiên</button>
-              
-                           </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 3</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 4</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 5</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 6</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 7</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 8</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 9</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 10</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 11</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit12" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 12</div>
+            </div>
         </div>
         
-        <div class="history-container">
-            <div class="history-title">Lịch sử nhập liệu</div>
-            <div class="history-info">
-                <span class="history-count">Đã lưu: <span id="current-count">0</span></span>
-                <input type="number" class="history-input-count" id="limit-input" placeholder="Giới hạn" min="1" max="1000" value="1000">
+        <div class="binary-row">
+            <div class="row-number">2</div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit0_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 0</div>
             </div>
-            <div class="history-list-container" id="history-list"></div>
-            <div class="button-row">
-                <button class="export-btn" onclick="exportToExcel()">Xuất Excel</button>
-               <button onclick="clearHistory()">Xóa lịch sử</button>
-
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit1_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 1</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit2_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 2</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit3_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 3</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit4_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 4</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit5_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 5</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit6_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 6</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit7_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 7</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit8_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 8</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit9_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 9</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 10</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit11_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 11</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit12_2" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 12</div>
             </div>
         </div>
+        
+        <div class="binary-row">
+            <div class="row-number">3</div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit0_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 0</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit1_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 1</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit2_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 2</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit3_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 3</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit4_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 4</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit5_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 5</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit6_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 6</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit7_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 7</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit8_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 8</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit9_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 9</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 10</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit11_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 11</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit12_3" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 12</div>
+            </div>
+        </div>
+        
+        <div class="binary-row">
+            <div class="row-number">4</div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit0_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 0</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit1_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 1</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit2_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 2</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit3_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 3</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit4_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 4</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit5_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 5</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit6_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 6</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit7_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 7</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit8_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 8</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit9_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 9</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 10</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit11_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 11</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit12_4" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 12</div>
+            </div>
+        </div>
+        
+        <div class="binary-row">
+            <div class="row-number">5</div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit0_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 0</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit1_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 1</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit2_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 2</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit3_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 3</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit4_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 4</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit5_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 5</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit6_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 6</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit7_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 7</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit8_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 8</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit9_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 9</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 10</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit11_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 11</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit12_5" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 12</div>
+            </div>
+        </div>
+        
+        <div class="binary-row">
+            <div class="row-number">6</div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit0_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 0</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit1_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 1</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit2_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 2</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit3_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 3</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit4_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 4</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit5_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 5</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit6_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 6</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit7_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 7</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit8_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 8</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit9_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 9</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 10</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit11_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 11</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit12_6" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 12</div>
+            </div>
+        </div>
+        
+        <div class="binary-row">
+            <div class="row-number">7</div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit0_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 0</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit1_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 1</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit2_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 2</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit3_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 3</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit4_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 4</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit5_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 5</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit6_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 6</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit7_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 7</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit8_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 8</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit9_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 9</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 10</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit11_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 11</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit12_7" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 12</div>
+            </div>
+        </div>
+        
+        <div class="binary-row">
+            <div class="row-number">8</div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit0_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 0</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit1_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 1</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit2_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 2</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit3_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 3</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit4_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 4</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit5_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 5</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit6_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 6</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit7_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 7</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit8_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 8</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit9_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 9</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 10</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit11_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 11</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit12_8" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 12</div>
+            </div>
+        </div>
+        
+        <div class="binary-row">
+            <div class="row-number">9</div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit0_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 0</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit1_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 1</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit2_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 2</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit3_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 3</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit4_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 4</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit5_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 5</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit6_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 6</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit7_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 7</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit8_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 8</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit9_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 9</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 10</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit11_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 11</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit12_9" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 12</div>
+            </div>
+        </div>
+        
+        <div class="binary-row">
+            <div class="row-number">10</div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit0_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 0</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit1_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 1</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit2_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 2</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit3_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 3</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit4_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 4</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit5_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 5</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit6_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 6</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit7_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 7</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit8_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 8</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit9_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 9</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 10</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit11_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 11</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit12_10" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 12</div>
+            </div>
+        </div>
+        
+        <div class="binary-row">
+            <div class="row-number">11</div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit0_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 0</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit1_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 1</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit2_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 2</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit3_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 3</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit4_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 4</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit5_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 5</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit6_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 6</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input" maxlength="1" id="bit7_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 7</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit8_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 8</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit9_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 9</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 10</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit11_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 11</div>
+            </div>
+            <div>
+                <input type="text" class="bit-input purple" maxlength="1" id="bit12_11" onkeyup="validateBit(this)">
+                <div class="bit-label">Bit 12</div>
+            </div>
+        </div>
+        
+        <button onclick="convertToDecimal()">Chuyển sang Thập Phân</button>
+        <button onclick="clearAll()">Xóa Tất Cả</button>
+        <button onclick="checkMatchingRows()">Kiểm Tra Trùng Khớp</button>
+        
+        <div class="result" id="result"></div>
     </div>
 
-    <script>
-        // Lấy tất cả các ô input
-        const inputs = document.querySelectorAll('.binary-input');
-        const binaryResult = document.getElementById('binary-result');
-        const reverseBinary = document.getElementById('reverse-binary');
-        const historyList = document.getElementById('history-list');
-        const currentCountSpan = document.getElementById('current-count');
-        const limitInput = document.getElementById('limit-input');
-        
-        // Mảng lưu lịch sử
-        let history = [];
+   
+      <script>
+    const ROWS = 11;
+    const BITS = 8;
 
-        // Hàm kiểm tra và chỉ cho phép nhập 0 hoặc 1
-        function validateInput(input) {
-            const value = input.value;
-            if (value !== '' && value !== '0' && value !== '1') {
-                input.value = '';
-                input.classList.add('invalid');
-                setTimeout(() => {
-                    input.classList.remove('invalid');
-                }, 500);
-                return false;
-            }
-            input.classList.remove('invalid');
-            return true;
-        }
-
-        // Hàm cập nhật kết quả
-        function updateResult() {
-            let binaryString = '';
-            inputs.forEach(input => {
-                binaryString += input.value || '0';
-            });
-            
-            // Cập nhật kết quả đảo ngược từ bit 3-7
-            updateReverseResult();
-            
-            // Kiểm tra xem ô 8 đã được nhập chưa để copy và reset
-            if (inputs[7].value) {
-                // Lưu lịch sử trước khi reset
-                autoSaveToHistory();
-                copyToDisplay();
-                resetInputs();
-            }
-        }
-        
-        // Hàm copy giá trị sang ô hiển thị
-        function copyToDisplay() {
-            inputs.forEach((input, index) => {
-                const displayInput = document.getElementById(`display-${index}`);
-                displayInput.value = input.value || '0';
-            });
-        }
-        
-        // Hàm reset ô input và focus vào ô đầu tiên
-        function resetInputs() {
-            inputs.forEach(input => {
-                input.value = '';
-            });
-            inputs[0].focus();
-        }
-        
-        // Hàm tự động lưu vào lịch sử
-        function autoSaveToHistory() {
-            let binaryString = '';
-            inputs.forEach(input => {
-                binaryString += input.value || '0';
-            });
-            
-            // Kiểm tra xem đã có giá trị này trong lịch sử chưa
-            const exists = history.some(item => item.bits === binaryString);
-            if (exists) return;
-            
-            // Tạo đối tượng lịch sử
-            const historyItem = {
-                bits: binaryString,
-                time: new Date().toLocaleTimeString('vi-VN')
-            };
-            
-            // Thêm vào đầu mảng
-            history.unshift(historyItem);
-            
-            // Giới hạn lịch sử theo giá trị input
-            const limit = parseInt(limitInput.value) || 1000;
-            if (history.length > limit) {
-                history = history.slice(0, limit);
-            }
-            
-            // Cập nhật hiển thị
-            updateHistoryDisplay();
-        }
-        
-        // Hàm cập nhật kết quả đảo ngược
-        function updateReverseResult() {
-            // Lấy giá trị từ bit 3-7 (index 3 đến 7) và đảo ngược giá trị
-            const reversedBits = [];
-            for (let i = 3; i <= 7; i++) {
-                const bit = inputs[i].value || '0';
-                // Đảo ngược giá trị: 0 -> 1, 1 -> 0
-                reversedBits.push(bit === '0' ? '1' : '0');
-            }
-            
-            // Hiển thị trong 5 ô kết quả
-            reversedBits.forEach((bit, index) => {
-                document.getElementById(`reverse-${index}`).value = bit;
-            });
-            
-            // Cập nhật chuỗi nhị phân đảo ngược
-            const reversedBinary = reversedBits.join('');
-            reverseBinary.textContent = reversedBinary;
-        }
-
-        // Thêm sự kiện cho mỗi ô input
-        inputs.forEach((input, index) => {
-            input.addEventListener('input', function() {
-                if (validateInput(this)) {
-                    updateResult();
-                    // Tự động chuyển đến ô tiếp theo
-                    if (this.value && index < inputs.length - 1) {
-                        inputs[index + 1].focus();
-                    }
-                }
-            });
-
-            input.addEventListener('keydown', function(e) {
-                // Cho phép xóa và di chuyển giữa các ô
-                if (e.key === 'Backspace' && !this.value && index > 0) {
-                    inputs[index - 1].focus();
-                }
-                if (e.key === 'ArrowLeft' && index > 0) {
-                    inputs[index - 1].focus();
-                }
-                if (e.key === 'ArrowRight' && index < inputs.length - 1) {
-                    inputs[index + 1].focus();
-                }
-            });
-
-            // Chỉ cho phép nhập số
-            input.addEventListener('keypress', function(e) {
-                const char = String.fromCharCode(e.which);
-                if (char !== '0' && char !== '1') {
-                    e.preventDefault();
-                }
-            });
-        });
-
-        // Hàm xóa tất cả
-        function clearInputs() {
-            inputs.forEach(input => {
-                input.value = '';
-            });
-            // Cập nhật kết quả sau khi xóa
-            updateResult();
-            inputs[0].focus();
-        }
-
-        // Hàm tạo ngẫu nhiên
-        function randomize() {
-            inputs.forEach(input => {
-                input.value = Math.random() < 0.5 ? '0' : '1';
-            });
-            updateResult();
-        }
-
-        // Hàm đặt tất cả là 1
-        function setAllOn() {
-            inputs.forEach(input => {
-                input.value = '1';
-            });
-            updateResult();
-        }
-
-        // Hàm đặt tất cả là 0
-        function setAllOff() {
-            inputs.forEach(input => {
-                input.value = '0';
-            });
-            updateResult();
-        }
-
-        // Hàm lưu vào lịch sử
-        function saveToHistory() {
-            let binaryString = '';
-            inputs.forEach(input => {
-                binaryString += input.value || '0';
-            });
-            
-            // Tạo đối tượng lịch sử
-            const historyItem = {
-                bits: binaryString,
-                time: new Date().toLocaleTimeString('vi-VN')
-            };
-            
-            // Thêm vào đầu mảng
-            history.unshift(historyItem);
-            
-            // Giới hạn lịch sử tối đa 10 items
-            if (history.length > 10) {
-                history = history.slice(0, 10);
-            }
-            
-            // Cập nhật hiển thị
-            updateHistoryDisplay();
-        }
-        
-        // Hàm cập nhật hiển thị lịch sử
-        function updateHistoryDisplay() {
-            historyList.innerHTML = '';
-            
-            history.forEach((item, index) => {
-                const historyDiv = document.createElement('div');
-                historyDiv.className = 'history-item';
-                
-                // Tạo 8 ô input cho lịch sử, chỉ 3 ô đầu có màu highlight
-                let inputsHtml = '<div class="history-inputs">';
-                for (let i = 0; i < 8; i++) {
-                    const className = i < 3 ? 'history-input highlight' : 'history-input';
-                    inputsHtml += `<input type="text" class="${className}" readonly value="${item.bits[i] || '0'}">`;
-                }
-                inputsHtml += '</div>';
-                
-                // Thêm thời gian
-                inputsHtml += `<div class="history-time">${item.time}</div>`;
-                
-                historyDiv.innerHTML = inputsHtml;
-                historyList.appendChild(historyDiv);
-            });
-            
-            // Cập nhật số lượng hiện tại
-            currentCountSpan.textContent = history.length;
-        }
-        
-        // Hàm xóa lịch sử
-        function clearHistory() {
-            history = [];
-            updateHistoryDisplay();
-        }
-
-        // Hàm xuất ra Excel
-        function exportToExcel() {
-            if (history.length === 0) {
-                alert('Không có dữ liệu để xuất!');
-                return;
-            }
-            
-            // Tạo nội dung CSV - mỗi giá trị nhị phân trên 1 ô trong 1 cột
-            let csvContent = "Giá trị nhị phân\n";
-            
-            history.forEach((item, index) => {
-                csvContent += `"${item.bits}"\n`;
-            });
-            
-            // Tạo blob và download
-            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            
-            link.setAttribute('href', url);
-            link.setAttribute('download', `lich_su_nhap_lieu_${new Date().toLocaleDateString('vi-VN').replace(/\//g, '-')}.csv`);
-            link.style.visibility = 'hidden';
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // Thêm sự kiện cho input giới hạn
-        limitInput.addEventListener('input', function() {
-            const value = parseInt(this.value) || 1000;
-            if (value < 1) this.value = 1;
-            if (value > 1000) this.value = 1000;
-            
-            // Cắt lịch sử nếu cần
-            if (history.length > value) {
-                history = history.slice(0, value);
-                updateHistoryDisplay();
-            }
-        });
-
-
-function resetDisplayAndReverse() {
-    // Xóa ô copy (display)
-    for (let i = 0; i < 8; i++) {
-        const d = document.getElementById(`display-${i}`);
-        if (d) d.value = '';
+    const bitChain = [];
+    for (let r = 1; r <= ROWS; r++) {
+      for (let b = 7; b >= 0; b--) {
+        bitChain.push(`bit${b}${r === 1 ? '' : '_' + r}`);
+      }
     }
 
-    // Xóa ô đảo ngược
-    for (let i = 0; i < 5; i++) {
-        const r = document.getElementById(`reverse-${i}`);
-        if (r) r.value = '';
+    const inputGate = document.getElementById('bit7');
+    inputGate.focus();
+
+    inputGate.addEventListener('keyup', () => {
+      const v = inputGate.value;
+      if (v !== '0' && v !== '1') {
+        inputGate.value = '';
+        return;
+      }
+      shiftAll(v);
+      inputGate.value = '';
+      inputGate.focus();
+      updateRedZeros();
+      checkMatchingRows();
+    });
+
+    function shiftAll(newBit) {
+      for (let i = bitChain.length - 1; i > 0; i--) {
+        document.getElementById(bitChain[i]).value =
+          document.getElementById(bitChain[i - 1]).value;
+      }
+      document.getElementById(bitChain[0]).value = newBit;
     }
 
-    // Reset chuỗi đảo ngược
-    reverseBinary.textContent = '00000';
+    document.querySelectorAll('.bit-input').forEach(el => {
+      if (el !== inputGate) el.readOnly = true;
+    });
 
-    // Xóa input chính
-    inputs.forEach(input => input.value = '');
-    inputs[0].focus();
+    function updateRedZeros() {
+      ['bit0', 'bit1', 'bit2'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el.value !== '') el.style.color = 'white';
+      });
+    }
+
+    function clearAllFlash() {
+      document.querySelectorAll('.flash').forEach(el =>
+        el.classList.remove('flash')
+      );
+    }
+
+  function checkMatchingRows() {
+  // 3 bit chuẩn của hàng 1
+  const base = [
+    document.getElementById('bit0').value,
+    document.getElementById('bit1').value,
+    document.getElementById('bit2').value
+  ];
+
+  // chưa đủ 0/1 thì dừng toàn bộ
+  if (!base.every(v => v === '0' || v === '1')) {
+    for (let r = 2; r <= 11; r++) {
+      for (let b = 0; b <= 2; b++) {
+        document.getElementById(`bit${b}_${r}`).classList.remove('blink');
+      }
+    }
+    return;
+  }
+
+  // kiểm tra từng hàng từ 2 -> 11
+  for (let r = 2; r <= 11; r++) {
+    const rowBits = [
+      document.getElementById(`bit0_${r}`).value,
+      document.getElementById(`bit1_${r}`).value,
+      document.getElementById(`bit2_${r}`).value
+    ];
+
+    const isMatch =
+      rowBits[0] === base[0] &&
+      rowBits[1] === base[1] &&
+      rowBits[2] === base[2];
+
+    for (let b = 0; b <= 2; b++) {
+      const el = document.getElementById(`bit${b}_${r}`);
+      el.classList.toggle('blink', isMatch);
+    }
+  }
 }
+</script>
 
-        // Khởi tạo
-        updateResult();
-        inputs[0].focus();
-    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
