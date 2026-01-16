@@ -838,42 +838,84 @@
       );
     }
 
-  function checkMatchingRows() {
-  // 3 bit chuẩn của hàng 1
-  const base = [
-    document.getElementById('bit0').value,
-    document.getElementById('bit1').value,
-    document.getElementById('bit2').value
-  ];
+  function invertBit(v) {
+  if (v === '0') return '1';
+  if (v === '1') return '0';
+  return '';
+}
 
-  // chưa đủ 0/1 thì dừng toàn bộ
-  if (!base.every(v => v === '0' || v === '1')) {
-    for (let r = 2; r <= 11; r++) {
-      for (let b = 0; b <= 2; b++) {
-        document.getElementById(`bit${b}_${r}`).classList.remove('blink');
-      }
+function getRowBit(row, index) {
+  if (row === 1) return document.getElementById(`bit${index}`);
+  return document.getElementById(`bit${index}_${row}`);
+}
+
+function clearAllBlink() {
+  for (let r = 2; r <= 11; r++) {
+    for (let i = 0; i < 3; i++) {
+      getRowBit(r, i).classList.remove('blink');
     }
+  }
+}
+
+function clearPurpleBits() {
+  for (let r = 2; r <= 11; r++) {
+    for (let i = 8; i <= 12; i++) {
+      const cell = getRowBit(r, i);
+      cell.value = '';
+      cell.classList.remove('blink', 'flash');
+    }
+  }
+}
+
+function checkMatchingRows() {
+  const baseBits = [0, 1, 2].map(i => getRowBit(1, i).value);
+
+  // hàng 1 chưa đủ 3 bit
+  if (!baseBits.every(v => v === '0' || v === '1')) {
+    clearAllBlink();
+    clearPurpleBits();
     return;
   }
 
-  // kiểm tra từng hàng từ 2 -> 11
+  let matchedRow = null;
+
+  // tìm hàng trùng gần nhất
   for (let r = 2; r <= 11; r++) {
-    const rowBits = [
-      document.getElementById(`bit0_${r}`).value,
-      document.getElementById(`bit1_${r}`).value,
-      document.getElementById(`bit2_${r}`).value
-    ];
-
-    const isMatch =
-      rowBits[0] === base[0] &&
-      rowBits[1] === base[1] &&
-      rowBits[2] === base[2];
-
-    for (let b = 0; b <= 2; b++) {
-      const el = document.getElementById(`bit${b}_${r}`);
-      el.classList.toggle('blink', isMatch);
+    const rowBits = [0, 1, 2].map(i => getRowBit(r, i).value);
+    if (rowBits.join('') === baseBits.join('')) {
+      matchedRow = r;
+      break;
     }
   }
+
+  // không còn trùng → reset
+  if (!matchedRow) {
+    clearAllBlink();
+    clearPurpleBits();
+    return;
+  }
+
+  // chỉ giữ nhấp nháy cho hàng đang trùng
+  clearAllBlink();
+  for (let i = 0; i < 3; i++) {
+    getRowBit(matchedRow, i).classList.add('blink');
+  }
+
+  // reset toàn bộ ô tím trước
+  clearPurpleBits();
+
+  // chỉ đảo bit của hàng đang nhấp nháy
+ for (let i = 3; i <= 7; i++) {
+  const src = getRowBit(matchedRow, i).value;
+  const output = getRowBit(matchedRow, i + 5);
+
+  output.value = invertBit(src);
+
+  // nhấp nháy khi vừa có giá trị
+  output.classList.remove('blink');
+  void output.offsetWidth; // ép browser reset animation
+  output.classList.add('blink');
+}
 }
 </script>
 
