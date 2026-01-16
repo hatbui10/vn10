@@ -185,45 +185,74 @@
         <h1>HỘP A - NHẬP BIT NHỊ PHÂN</h1>
         
        <div class="binary-row">
-     <div class="row-number">1</div>
+     <div class="row-number">0</div>
 
  <!-- Số 4 -->
-    <div style="grid-column: 6">
+    <div>
         <input type="text" class="number-input" maxlength="3" id="num0">
            </div>
     
 <!-- Số 4 -->
-    <div style="grid-column: 6">
-        <input type="text" class="number-input" maxlength="3" id="num1">
+    <div>
+            <input type="text" class="number-input" maxlength="3" id="num1">
            </div>
     <!-- Số 5 -->
-    <div style="grid-column: 7">
+    <div>
         <input type="text" class="number-input" maxlength="3" id="num2">
            </div>
 
 
     <!-- Số 4 -->
-    <div style="grid-column: 6">
+    <div>
         <input type="text" class="number-input" maxlength="3" id="num3">
            </div>
 
     <!-- Số 5 -->
-    <div style="grid-column: 7">
+    <div>
         <input type="text" class="number-input" maxlength="3" id="num4">
            </div>
 
     <!-- Số 6 -->
-    <div style="grid-column: 8">
+    <div>
         <input type="text" class="number-input" maxlength="3" id="num5">
            </div>
 
 
     <!-- Số 4 -->
-    <div style="grid-column: 6">
+    <div>
         <input type="text" class="number-input" maxlength="3" id="num6" oninput="updateTopRowFromNum6()">
-      
-
     </div>
+
+ <!-- Số 4 -->
+    <div>
+            <input type="text" class="number-input" maxlength="3" id="num7">
+           </div>
+    
+<!-- Số 4 -->
+    <div>
+        <input type="text" class="number-input" maxlength="3" id="num8">
+           </div>
+    <!-- Số 5 -->
+    <div>
+        <input type="text" class="number-input" maxlength="3" id="num9">
+           </div>
+
+
+    <!-- Số 4 -->
+    <div>
+        <input type="text" class="number-input" maxlength="3" id="num10">
+           </div>
+
+    <!-- Số 5 -->
+    <div>
+        <input type="text" class="number-input" maxlength="3" id="num11">
+           </div>
+           
+           <!-- Số 5 -->
+    <div>
+        <input type="text" class="number-input" maxlength="3" id="num12" >
+           </div>
+
 
    
 </div>
@@ -1015,35 +1044,39 @@ function clearAll() {
   inputGate.focus();
 }
 
-let num6FocusTimer = null;
-
 function updateTopRowFromNum6() {
-  console.log('updateTopRowFromNum6 RUN');
-
   const baseEl = document.getElementById('num6');
   const base = parseInt(baseEl.value, 10);
   if (isNaN(base)) return;
 
-  // tính các num khác
-  for (let i = 0; i < 8; i++) {
+  // num6 là mốc
+  let value = base - 6;
+
+  for (let i = 0; i <= 12; i++) {
+
+    // ❌ bỏ hẳn num7 khỏi dãy
+    if (i === 7) continue;
+
     const el = document.getElementById(`num${i}`);
     if (!el) continue;
-    el.value = base - (6 - i);
+
+    el.value = value;
+    value++;
   }
 
-  // ❗ reset timer cũ
-  clearTimeout(num6FocusTimer);
 
-  // ⏳ đợi 2 giây sau khi NGỪNG GÕ
-  num6FocusTimer = setTimeout(() => {
+  // ===== focus bit7 sau 2 giây =====
+  clearTimeout(window.num6FocusTimer);
+
+  window.num6FocusTimer = setTimeout(() => {
     const bit7 = document.getElementById('bit7');
     if (bit7) {
       bit7.focus();
       bit7.select();
-      console.log('FOCUS bit7');
     }
   }, 2000);
 }
+  
 window.addEventListener('load', () => {
     const num6 = document.getElementById('num6');
     if (num6) {
@@ -1055,14 +1088,3 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
