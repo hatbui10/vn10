@@ -199,23 +199,73 @@
   will-change: transform, box-shadow, filter;
 }
 
-#countdown {
-  margin: 50px;
-  padding: 6px 12px;
-
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-
-  color: #ffeb3b;
-  background: rgba(0, 0, 0, 0.45);
-
-  border-radius: 6px;
-  text-align: center;
-
-  width: fit-content;
-  user-select: none;
+.control-row {
+  display: flex;
+  gap: 14px;
+  margin: 15px;
 }
+
+/* Hộp chung */
+.control-box {
+  padding: 12px 16px;
+  min-width: 160px;
+
+  border: 2px solid rgba(255, 204, 0, 0.5);
+  border-radius: 10px;
+
+  background: radial-gradient(circle at top, #222, #111);
+  box-shadow: 0 0 18px rgba(255, 204, 0, 0.25);
+
+  text-align: center;
+}
+
+/* Tiêu đề hộp */
+.box-title {
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffcc00;
+  opacity: 0.9;
+}
+
+/* Đồng hồ */
+.countdown {
+  min-height: 22px;
+  font-weight: bold;
+  color: #ffcc00;
+  text-shadow: 0 0 6px rgba(255, 204, 0, 0.8);
+}
+
+/* Nút random */
+#randomBtn {
+  margin-top: 4px;
+  padding: 6px 14px;
+  font-size: 15px;
+  font-weight: bold;
+
+  border: none;
+  border-radius: 6px;
+
+  background: linear-gradient(135deg, #ffcc00, #ff9900);
+  color: #000;
+  cursor: pointer;
+
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+}
+
+#randomBtn:hover {
+  filter: brightness(1.1);
+}
+
+/* Kết quả random */
+.random-result {
+  margin-top: 8px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #00ffcc;
+  text-shadow: 0 0 10px rgba(0, 255, 204, 0.9);
+}
+
 
 
     </style>
@@ -223,8 +273,25 @@
 <body>
     <div class="container">
         <h1>HỘP A - NHẬP BIT NHỊ PHÂN</h1>
-        <div id="countdown" style="margin-top:8px; font-weight:bold; color:#ffcc00;">
+        
+        
+     <div class="control-row">
+
+  <!-- HỘP ĐỒNG HỒ -->
+  <div class="control-box">
+    <div class="box-title">⏳ Đếm ngược</div>
+    <div id="countdown" class="countdown"></div>
+  </div>
+
+  <!-- HỘP RANDOM -->
+  <div class="control-box">
+    <div class="box-title">🎲 Bấm đi bạn </div>
+    <button id="randomBtn" type="button">Random 0 / 1</button>
+    <div id="randomResult" class="random-result"></div>
+  </div>
+
 </div>
+
 
        <div class="binary-row">
      <div class="row-number">0</div>
@@ -934,6 +1001,47 @@
       }
     }
     
+    
+   function randomBit() {
+  return Math.random() < 0.5 ? '0' : '1';
+}
+
+const randomBtn = document.getElementById('randomBtn');
+const randomResult = document.getElementById('randomResult');
+
+let randomInterval = null;
+
+randomBtn.addEventListener('click', () => {
+  let count = 0;
+  const maxRuns = 12; // số lần giả lập
+
+  randomBtn.disabled = true; // tránh spam
+  randomResult.textContent = '⏳ Đang random...';
+
+  clearInterval(randomInterval);
+
+  randomInterval = setInterval(() => {
+    count++;
+
+    const temp = randomBit();
+    randomResult.textContent = `🎲 Lần ${count}: ${temp}`;
+
+    if (count >= maxRuns) {
+      clearInterval(randomInterval);
+
+      const finalBit = randomBit();
+      randomResult.textContent = `✅ Kết quả: ${finalBit}`;
+
+      randomBtn.disabled = false;
+    }
+  }, 120);
+});
+
+ document.getElementById('randomBtn').addEventListener('click', () => {
+  const v = randomBit();
+  document.getElementById('randomResult').textContent = v;
+});
+
     function increaseTopRow() {
   for (let i = 0; i <= 12; i++) {
     const el = document.getElementById(`num${i}`);
@@ -965,6 +1073,8 @@ document.querySelectorAll('.bit-input').forEach(el => {
 
 // Focus mặc định vào bit 7
 inputGate.focus();
+
+
 
 // Xử lý nhập cho bit 7
 inputGate.addEventListener('keyup', () => {
@@ -1252,6 +1362,8 @@ window.addEventListener('load', () => {
       num6.select(); // nếu muốn bôi đen sẵn
     }
   });
+  
+ 
 </script>
 
 </body>
