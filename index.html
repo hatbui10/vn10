@@ -980,15 +980,30 @@
 
    
       <script>
-    const ROWS = 11;
-    const BITS = 8;
+   const ROWS = 11;
+const bitChain = [];
 
-    const bitChain = [];
-    for (let r = 1; r <= ROWS; r++) {
-      for (let b = 7; b >= 0; b--) {
-        bitChain.push(`bit${b}${r === 1 ? '' : '_' + r}`);
-      }
-    }
+// HÀNG 1: chỉ bit3 -> bit0
+for (let b = 3; b >= 0; b--) {
+  bitChain.push(`bit${b}`);
+}
+
+// HÀNG 2 -> 11: đủ bit7 -> bit0
+for (let r = 2; r <= ROWS; r++) {
+  for (let b = 7; b >= 0; b--) {
+    bitChain.push(`bit${b}_${r}`);
+  }
+}
+let bitValues = new Array(bitChain.length).fill(0);
+function inputBit3(value) {
+  // dịch trái toàn chuỗi
+  for (let i = bitValues.length - 1; i > 0; i--) {
+    bitValues[i] = bitValues[i - 1];
+  }
+
+  // nạp dữ liệu DUY NHẤT vào bit3 hàng 1
+  bitValues[0] = value ? 1 : 0;
+}
     
     
    function randomBit() {
@@ -1031,20 +1046,48 @@ randomBtn.addEventListener('click', () => {
   document.getElementById('randomResult').textContent = v;
 });
 
-    function increaseTopRow() {
-  for (let i = 0; i <= 12; i++) {
+
+function increaseTopRow() {
+  // tăng num0 -> num2
+  for (let i = 0; i <= 2; i++) {
     const el = document.getElementById(`num${i}`);
     if (!el) continue;
+
     let v = parseInt(el.value, 10);
     if (isNaN(v)) v = 0;
+
     el.value = v + 1;
+  }
+
+  // tăng các cặp đồng bộ
+  const pairs = [
+    [3, 8],
+    [4, 9],
+    [5, 10],
+    [6, 11]
+  ];
+
+  for (const [a, b] of pairs) {
+    const elA = document.getElementById(`num${a}`);
+    const elB = document.getElementById(`num${b}`);
+
+    if (!elA || !elB) continue;
+
+    let v = parseInt(elA.value, 10);
+    if (isNaN(v)) v = 0;
+
+    v = v + 1;
+
+    elA.value = v;
+    elB.value = v;
   }
 }
 
 
-const inputGate  = document.getElementById('bit7');
-const inputGate3 = document.getElementById('bit3');
-const inputGate4 = document.getElementById('bit4');
+
+const inputGate  = document.getElementById('bit3');
+const inputGate3 = document.getElementById('bit1');
+const inputGate4 = document.getElementById('bit2');
 const inputGate8  = document.getElementById('bit8');
 const inputGate9 = document.getElementById('bit9');
 const inputGate10 = document.getElementById('bit10');
@@ -1297,10 +1340,10 @@ function updateTopRowFromNum6() {
   clearTimeout(window.num6FocusTimer);
 
   window.num6FocusTimer = setTimeout(() => {
-    const bit7 = document.getElementById('bit7');
-    if (bit7) {
-      bit7.focus();
-      bit7.select();
+    const bit3 = document.getElementById('bit3');
+    if (bit3) {
+      bit3.focus();
+      bit3.select();
     }
   }, 2000);
 }
@@ -1318,4 +1361,16 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
 
