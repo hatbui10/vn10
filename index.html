@@ -454,7 +454,7 @@
                 <div class="bit-label">Bit 9</div>
             </div>
             <div>
-                <input type="text" class="bit-input " maxlength="1" id="bit10_2" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_2" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 10</div>
             </div>
             <div>
@@ -510,7 +510,7 @@
                 <div class="bit-label">Bit 9</div>
             </div>
             <div>
-                <input type="text" class="bit-input " maxlength="1" id="bit10_3" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_3" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 10</div>
             </div>
             <div>
@@ -566,7 +566,7 @@
                 <div class="bit-label">Bit 9</div>
             </div>
             <div>
-                <input type="text" class="bit-input " maxlength="1" id="bit10_4" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_4" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 10</div>
             </div>
             <div>
@@ -622,7 +622,7 @@
                 <div class="bit-label">Bit 9</div>
             </div>
             <div>
-                <input type="text" class="bit-input " maxlength="1" id="bit10_5" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_5" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 10</div>
             </div>
             <div>
@@ -678,7 +678,7 @@
                 <div class="bit-label">Bit 9</div>
             </div>
             <div>
-                <input type="text" class="bit-input " maxlength="1" id="bit10_6" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_6" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 10</div>
             </div>
             <div>
@@ -734,7 +734,7 @@
                 <div class="bit-label">Bit 9</div>
             </div>
             <div>
-                <input type="text" class="bit-input " maxlength="1" id="bit10_7" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_7" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 10</div>
             </div>
             <div>
@@ -790,7 +790,7 @@
                 <div class="bit-label">Bit 9</div>
             </div>
             <div>
-                <input type="text" class="bit-input " maxlength="1" id="bit10_8" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_8" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 10</div>
             </div>
             <div>
@@ -846,7 +846,7 @@
                 <div class="bit-label">Bit 9</div>
             </div>
             <div>
-                <input type="text" class="bit-input " maxlength="1" id="bit10_9" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_9" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 10</div>
             </div>
             <div>
@@ -902,7 +902,7 @@
                 <div class="bit-label">Bit 9</div>
             </div>
             <div>
-                <input type="text" class="bit-input " maxlength="1" id="bit10_10" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_10" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 10</div>
             </div>
             <div>
@@ -958,7 +958,7 @@
                 <div class="bit-label">Bit 9</div>
             </div>
             <div>
-                <input type="text" class="bit-input " maxlength="1" id="bit10_11" onkeyup="validateBit(this)">
+                <input type="text" class="bit-input purple" maxlength="1" id="bit10_11" onkeyup="validateBit(this)">
                 <div class="bit-label">Bit 10</div>
             </div>
             <div>
@@ -1116,45 +1116,9 @@ autoFocusNext(inputGate9,  inputGate10);
 autoFocusNext(inputGate10, inputGate11);
 autoFocusNext(inputGate11, inputGate12);
 
-/* =======================
-   RESET BIT 8 → 12
-======================= */
-function clearBits8to12() {
-  for (let i = 8; i <= 12; i++) {
-    const el = document.getElementById(`bit${i}`);
-    if (el) el.value = '';
-  }
-}
-
-/* =======================
-   TIMER PHIÊN BIT 8
-======================= */
-let bitSessionTimer = null;
-
-function startBit8Session() {
-  // huỷ phiên cũ nếu có
-  if (bitSessionTimer) {
-    clearTimeout(bitSessionTimer);
-    bitSessionTimer = null;
-  }
-
- 
-
-  // đặt timeout kết thúc phiên
-  bitSessionTimer = setTimeout(() => {
-    clearBits8to12();
-
-    // trả focus về bit7
-    inputGate.value = '';
-    inputGate.focus();
-    inputGate.select();
-
-  
 
 /* =======================
    KÍCH HOẠT KHI CHẠM BIT8
-======================= */
-inputGate8.addEventListener('focus', startBit8Session);
 // nếu muốn chỉ click chuột thì dùng dòng dưới thay thế
 // inputGate8.addEventListener('click', startBit8Session);
 
@@ -1354,3 +1318,4 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
