@@ -1117,32 +1117,7 @@ function autoFocusNext(current, next) {
 }
 
 
-/* =======================
-   TIMER ĐẾM NGƯỢC
-======================= */
-let countdownTimer = null;
-let remainingTime = 0;
 
-function startCountdown(seconds) {
-  const display = document.getElementById('countdown');
-  if (!display) return;
-
-  clearInterval(countdownTimer);
-
-  remainingTime = seconds;
-  display.textContent = `⏳ Còn lại: ${remainingTime}s`;
-
-  countdownTimer = setInterval(() => {
-    remainingTime--;
-    display.textContent = `⏳ Còn lại: ${remainingTime}s`;
-
-    if (remainingTime <= 0) {
-      clearInterval(countdownTimer);
-      countdownTimer = null;
-      display.textContent = '';
-    }
-  }, 1000);
-}
 
 /* =======================
    AUTO FOCUS CHUỖI BIT
@@ -1174,8 +1149,7 @@ function startBit8Session() {
     bitSessionTimer = null;
   }
 
-  // khởi động đồng hồ
-  startCountdown(120);
+ 
 
   // đặt timeout kết thúc phiên
   bitSessionTimer = setTimeout(() => {
@@ -1397,6 +1371,7 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
 
 
 
