@@ -985,10 +985,31 @@ function autoFocusNext(current, next) {
     next.select();
   });
 }
+
+
 autoFocusNext(inputGate8,  inputGate9);
 autoFocusNext(inputGate9,  inputGate10);
 autoFocusNext(inputGate10, inputGate11);
 autoFocusNext(inputGate11, inputGate12);
+
+let bit12Timer = null;
+
+inputGate12.addEventListener('keyup', () => {
+  const v = inputGate12.value;
+
+  if (v !== '0' && v !== '1') {
+    inputGate12.value = '';
+    return;
+  }
+
+  clearTimeout(bit12Timer);
+
+  bit12Timer = setTimeout(() => {
+    inputGate.value = '';
+    inputGate.focus();
+    inputGate.select();
+  }, 120000); // 120 giây
+});
 
 // nếu muốn vòng lại bit7
 // autoFocusNext(inputGate12, inputGate);
@@ -1084,7 +1105,17 @@ function checkMatchingRows() {
   void output.offsetWidth; // ép browser reset animation
   output.classList.add('blink');
 }
+
+// focus về bit8 hàng 1 sau khi dán xong
+const bit8 = document.getElementById('bit8');
+if (bit8) {
+  bit8.focus();
+  bit8.select();
 }
+}
+
+
+
 function clearAllNums() {
   for (let i = 0; i <= 12; i++) {
     const el = document.getElementById(`num${i}`);
@@ -1113,6 +1144,8 @@ function clearAll() {
   // 5. Focus lại bit7
   inputGate.value = '';
   inputGate.focus();
+  clearTimeout(bit12Timer);
+
 }
 
 
