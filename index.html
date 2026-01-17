@@ -228,13 +228,6 @@
   opacity: 0.9;
 }
 
-/* Đồng hồ */
-.countdown {
-  min-height: 22px;
-  font-weight: bold;
-  color: #ffcc00;
-  text-shadow: 0 0 6px rgba(255, 204, 0, 0.8);
-}
 
 /* Nút random */
 #randomBtn {
@@ -1156,13 +1149,7 @@ function startBit8Session() {
     inputGate.focus();
     inputGate.select();
 
-    // xoá đồng hồ
-    const display = document.getElementById('countdown');
-    if (display) display.textContent = '';
-
-    bitSessionTimer = null;
-  }, 120000);
-}
+  
 
 /* =======================
    KÍCH HOẠT KHI CHẠM BIT8
@@ -1367,6 +1354,8 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
+
 
 
 
