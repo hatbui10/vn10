@@ -286,7 +286,7 @@
   <!-- HỘP RANDOM -->
   <div class="control-box">
     <div class="box-title">🎲 Bấm đi bạn </div>
-    <button id="randomBtn" type="button">0 hay 1 đây?</button>
+    <button id="randomBtn" type="button">0 hay 1 đây? </button>
     <div id="randomResult" class="random-result"></div>
   </div>
 
@@ -1117,6 +1117,9 @@ function autoFocusNext(current, next) {
 }
 
 
+/* =======================
+   TIMER ĐẾM NGƯỢC
+======================= */
 let countdownTimer = null;
 let remainingTime = 0;
 
@@ -1124,29 +1127,34 @@ function startCountdown(seconds) {
   const display = document.getElementById('countdown');
   if (!display) return;
 
-  remainingTime = seconds;
-  display.textContent = `⏳ Còn lại : ${remainingTime}s`;
-
   clearInterval(countdownTimer);
+
+  remainingTime = seconds;
+  display.textContent = `⏳ Còn lại: ${remainingTime}s`;
 
   countdownTimer = setInterval(() => {
     remainingTime--;
-    display.textContent = `⏳ Còn lại : ${remainingTime}s`;
+    display.textContent = `⏳ Còn lại: ${remainingTime}s`;
 
     if (remainingTime <= 0) {
       clearInterval(countdownTimer);
+      countdownTimer = null;
       display.textContent = '';
     }
   }, 1000);
 }
 
+/* =======================
+   AUTO FOCUS CHUỖI BIT
+======================= */
 autoFocusNext(inputGate8,  inputGate9);
 autoFocusNext(inputGate9,  inputGate10);
 autoFocusNext(inputGate10, inputGate11);
 autoFocusNext(inputGate11, inputGate12);
 
-let bit12Timer = null;
-
+/* =======================
+   RESET BIT 8 → 12
+======================= */
 function clearBits8to12() {
   for (let i = 8; i <= 12; i++) {
     const el = document.getElementById(`bit${i}`);
@@ -1154,32 +1162,53 @@ function clearBits8to12() {
   }
 }
 
-inputGate12.addEventListener('keyup', () => {
-  const v = inputGate12.value;
+/* =======================
+   TIMER PHIÊN BIT 8
+======================= */
+let bitSessionTimer = null;
 
-  if (v !== '0' && v !== '1') {
-    inputGate12.value = '';
-    return;
+function startBit8Session() {
+  // huỷ phiên cũ nếu có
+  if (bitSessionTimer) {
+    clearTimeout(bitSessionTimer);
+    bitSessionTimer = null;
   }
 
-  // bắt đầu đồng hồ 120 giây
+  // khởi động đồng hồ
   startCountdown(120);
 
-  clearTimeout(bit12Timer);
-
-  bit12Timer = setTimeout(() => {
-    // reset bit 8–12
+  // đặt timeout kết thúc phiên
+  bitSessionTimer = setTimeout(() => {
     clearBits8to12();
 
-    // focus về bit7
+    // trả focus về bit7
     inputGate.value = '';
     inputGate.focus();
     inputGate.select();
 
-    // xóa đồng hồ
+    // xoá đồng hồ
     const display = document.getElementById('countdown');
     if (display) display.textContent = '';
+
+    bitSessionTimer = null;
   }, 120000);
+}
+
+/* =======================
+   KÍCH HOẠT KHI CHẠM BIT8
+======================= */
+inputGate8.addEventListener('focus', startBit8Session);
+// nếu muốn chỉ click chuột thì dùng dòng dưới thay thế
+// inputGate8.addEventListener('click', startBit8Session);
+
+/* =======================
+   VALIDATE BIT12
+======================= */
+inputGate12.addEventListener('keyup', () => {
+  const v = inputGate12.value;
+  if (v !== '0' && v !== '1') {
+    inputGate12.value = '';
+  }
 });
 
 
@@ -1368,8 +1397,6 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
-
-
 
 
 
