@@ -12,7 +12,6 @@
         .container { max-width: 1000px; margin: auto; background: #1a1a1a; padding: 15px; border-radius: 10px; }
         h2 { text-align: center; color: var(--primary); margin-top: 5px; }
         
-        /* CSS cho hàng chọn File/Thư mục */
         .upload-row { display: flex; gap: 10px; margin-bottom: 10px; }
         .upload-box { 
             flex: 1; border: 2px dashed #444; padding: 20px; text-align: center; 
@@ -42,6 +41,8 @@
         td { padding: 6px; text-align: center; border-bottom: 1px solid #333; font-family: monospace; font-size: 16px; }
         .txt-lon { color: var(--color-lon); font-weight: bold; }
         .txt-nho { color: var(--color-nho); font-weight: bold; }
+        .txt-tong { color: #ff9f43; font-weight: bold; }
+        .txt-mark { color: #ff4757; font-weight: bold; font-size: 18px; } /* CSS chữ X màu đỏ nổi bật */
         #canvas-helper { display: none; }
 
         @media print {
@@ -53,6 +54,8 @@
             td, th { border-bottom: 1px solid #444 !important; color: #fff !important; }
             .txt-lon { color: yellow !important; }
             .txt-nho { color: #00e5ff !important; }
+            .txt-tong { color: #ff9f43 !important; }
+            .txt-mark { color: #ff4757 !important; }
         }
     </style>
 </head>
@@ -91,7 +94,13 @@
         <div id="txtHorizontal">Dãy số...</div>
         <table>
             <thead>
-                <tr><th>Kỳ xổ</th><th>Số</th><th>Lớn Nhỏ</th></tr>
+                <tr>
+                    <th>Kỳ xổ</th>
+                    <th>Số</th>
+                    <th>Lớn Nhỏ</th>
+                    <th>Tổng</th>
+                    <th>Trạng thái</th>
+                </tr>
             </thead>
             <tbody id="resultBody"></tbody>
         </table>
@@ -119,9 +128,7 @@
     let allFiles = []; 
     let finalData = [];
 
-    // Xử lý khi chọn File lẻ
     fileInput.addEventListener('change', handleFiles);
-    // Xử lý khi chọn Thư mục
     folderInput.addEventListener('change', handleFiles);
 
     function handleFiles(e) {
@@ -131,7 +138,7 @@
             fileCountText.innerText = `Đã tích lũy: ${allFiles.length} ảnh`;
             scanBtn.disabled = false;
         }
-        e.target.value = ""; // Reset để có thể chọn lại cùng thư mục nếu cần
+        e.target.value = ""; 
     }
 
     scanBtn.addEventListener('click', async () => {
@@ -164,7 +171,12 @@
         }
 
         await worker.terminate();
-        finalData.sort((a, b) => b.kyXo.localeCompare(a.kyXo));
+        // Sắp xếp giảm dần theo kỳ gốc để hiển thị từ mới nhất xuống cũ nhất
+        finalData.sort((a, b) => b.kyXoGoc.localeCompare(a.kyXoGoc));
+        
+        // Tính toán logic so sánh giữa các kỳ kề nhau sau khi đã sắp xếp xong xuôi
+        calculateComparisons();
+        
         renderTable(); 
         updateHorizontalData(); 
 
@@ -196,44 +208,82 @@
         lines.forEach(line => {
             const kyXoMatch = line.match(/\d{10,}/);
             if (kyXoMatch) {
-                const kyXo = kyXoMatch[0];
-                const sauKyXo = line.split(kyXo)[1] || "";
+                const kyXoGoc = kyXoMatch[0];
+                const kyXo5So = kyXoGoc.slice(-5);
+                
+                const sauKyXo = line.split(kyXoGoc)[1] || "";
                 const numMatch = sauKyXo.match(/\d/);
                 if (numMatch) {
                     const conSo = parseInt(numMatch[0]);
                     let lonNho = (conSo >= 5) ? "Lớn" : "Nhỏ";
-                    if(!finalData.some(item => item.kyXo === kyXo)) {
-                        finalData.push({kyXo, conSo, lonNho});
+                    
+                    const soCuoiKyXo = parseInt(kyXoGoc.slice(-1));
+                    const tongSo = soCuoiKyXo + conSo;
+                    
+                    // Quy đổi tính chất của cột Tổng: < 10 là "Nhỏ", ngược lại >= 10 là "Lớn"
+                    let tinhChatTong = (tongSo < 10) ? "Nhỏ" : "Lớn";
+
+                    if(!finalData.some(item => item.kyXoGoc === kyXoGoc)) {
+                        finalData.push({
+                            kyXoGoc, 
+                            kyXo5So, 
+                            conSo, 
+                            lonNho, 
+                            tongSo, 
+                            tinhChatTong,
+                            trangThai: "" // Mặc định để trống, tính sau
+                        });
                     }
                 }
             }
         });
     }
 
+    function calculateComparisons() {
+        // Vòng lặp chạy ngược từ dưới lên (từ kỳ cũ sang kỳ mới hơn) hoặc xuôi theo danh sách đã sắp xếp.
+        // Vì danh sách hiển thị từ Mới nhất (ở trên) đến Cũ nhất (ở dưới). 
+        // Do đó dòng hiện tại (i) sẽ so sánh với dòng ngay phía dưới nó (i + 1) chính là kỳ liền trước trong lịch sử.
+        for (let i = 0; i < finalData.length - 1; i++) {
+            const kyHienTai = finalData[i];
+            const kyLienTruoc = finalData[i + 1]; // Ví dụ: i là kỳ 412 thì i+1 là kỳ 411
+            
+            // So sánh tính chất cột Tổng giữa 2 kỳ kề nhau
+            if (kyHienTai.tinhChatTong !== kyLienTruoc.tinhChatTong) {
+                kyLienTruoc.trangThai = "X"; // Nếu khác nhau thì đánh dấu X vào kỳ cũ (Ví dụ: kỳ 411)
+            } else {
+                kyLienTruoc.trangThai = "";  // Nếu trùng thì bỏ qua
+            }
+        }
+    }
+
     function renderTable() {
         let html = "";
         finalData.forEach(d => {
             const colorClass = (d.lonNho === "Lớn") ? "txt-lon" : "txt-nho";
-            html += `<tr><td>${d.kyXo}</td><td class="${colorClass}">${d.conSo}</td><td class="${colorClass}">${d.lonNho}</td></tr>`;
+            html += `<tr>
+                <td>${d.kyXo5So}</td>
+                <td class="${colorClass}">${d.conSo}</td>
+                <td class="${colorClass}">${d.lonNho}</td>
+                <td class="txt-tong">${d.tongSo}</td>
+                <td class="txt-mark">${d.trangThai}</td>
+            </tr>`;
         });
         resultBody.innerHTML = html;
     }
 
     function updateHorizontalData() {
-        const sortedData = [...finalData].sort((a, b) => a.kyXo.localeCompare(b.kyXo));
+        const sortedData = [...finalData].sort((a, b) => a.kyXoGoc.localeCompare(b.kyXoGoc));
         txtHorizontal.innerText = sortedData.map(item => item.conSo).join(" ");
     }
 
     downloadBtn.addEventListener('click', () => {
         const content = txtHorizontal.innerText;
-        // Đếm số lượng chữ số thực tế (bỏ qua dấu cách)
         const digitCount = content.replace(/\s/g, '').length;
         
         const blob = new Blob([content], {type: 'text/plain;charset=utf-8'});
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        // Tên file dạng: vn168 - [số chữ số].txt
         a.download = `vn168 - ${digitCount}.txt`;
         document.body.appendChild(a);
         a.click();
