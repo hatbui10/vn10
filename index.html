@@ -23,13 +23,20 @@
         #file-count { color: #f1c40f; font-weight: bold; display: block; text-align: center; margin: 10px 0; }
         .progress { height: 15px; background: #333; border-radius: 8px; margin: 10px 0; display: none; overflow: hidden; }
         .progress-bar { height: 100%; background: var(--secondary); width: 0%; transition: width 0.1s; }
-        .btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px; }
-        button { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
+        /* CSS cho hàng nút bấm và ô hiển thị đếm chuỗi */
+        .btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px; align-items: center; }
+        button, .info-box { padding: 10px 15px; border: none; border-radius: 5px; font-weight: bold; font-size: 13.33px; }
+        button { cursor: pointer; }
         .btn-scan { background: #e74c3c; color: white; }
         .btn-dl { background: #27ae60; color: white; }
         .btn-img { background: #3498db; color: white; }
         .btn-pdf { background: #9b59b6; color: white; }
         
+        /* CSS ô đếm chuỗi X bên cạnh nút Xóa hết */
+        .info-box { background: #222; color: #fff; border: 1px solid #f1c40f; display: inline-block; }
+        #xStreakCount { color: #f1c40f; font-size: 16px; margin: 0 2px; }
+
         #tableCaptureArea { background: #000; padding: 10px; border-radius: 5px; }
         #txtHorizontal { 
             width: 100%; min-height: 80px; padding: 10px; background: #000; color: #00ff41; 
@@ -42,7 +49,7 @@
         .txt-lon { color: var(--color-lon); font-weight: bold; }
         .txt-nho { color: var(--color-nho); font-weight: bold; }
         .txt-tong { color: #ff9f43; font-weight: bold; }
-        .txt-mark { color: #ff4757; font-weight: bold; font-size: 18px; } /* CSS chữ X màu đỏ nổi bật */
+        .txt-mark { color: #ff4757; font-weight: bold; font-size: 18px; }
         #canvas-helper { display: none; }
 
         @media print {
@@ -85,6 +92,7 @@
         <button id="exportImgBtn" class="btn-img" disabled>XUẤT ẢNH HD</button>
         <button id="pdfBtn" class="btn-pdf" disabled>XUẤT FILE PDF</button> 
         <button onclick="location.reload()" style="background:#555; color:white;">XÓA HẾT</button>
+        <div class="info-box">🔥 Số chuỗi X liên tiếp (≥5): <span id="xStreakCount">0</span> chuỗi</div>
     </div>
 
     <div class="progress" id="progressBox"><div class="progress-bar" id="progressBar"></div></div>
@@ -124,6 +132,7 @@
     const pdfBtn = document.getElementById('pdfBtn');
     const canvas = document.getElementById('canvas-helper');
     const ctx = canvas.getContext('2d');
+    const xStreakCount = document.getElementById('xStreakCount');
 
     let allFiles = []; 
     let finalData = [];
@@ -148,6 +157,7 @@
         progressBox.style.display = 'block';
         finalData = [];
         resultBody.innerHTML = "";
+        xStreakCount.innerText = "0";
 
         const worker = await Tesseract.createWorker({
             cacheMethod: 'none',
@@ -171,11 +181,10 @@
         }
 
         await worker.terminate();
-        // Sắp xếp giảm dần theo kỳ gốc để hiển thị từ mới nhất xuống cũ nhất
         finalData.sort((a, b) => b.kyXoGoc.localeCompare(a.kyXoGoc));
         
-        // Tính toán logic so sánh giữa các kỳ kề nhau sau khi đã sắp xếp xong xuôi
         calculateComparisons();
+        countXStreaks(); // Chạy hàm đếm số chuỗi (số lượng nhóm)
         
         renderTable(); 
         updateHorizontalData(); 
@@ -220,7 +229,6 @@
                     const soCuoiKyXo = parseInt(kyXoGoc.slice(-1));
                     const tongSo = soCuoiKyXo + conSo;
                     
-                    // Quy đổi tính chất của cột Tổng: < 10 là "Nhỏ", ngược lại >= 10 là "Lớn"
                     let tinhChatTong = (tongSo < 10) ? "Nhỏ" : "Lớn";
 
                     if(!finalData.some(item => item.kyXoGoc === kyXoGoc)) {
@@ -231,7 +239,7 @@
                             lonNho, 
                             tongSo, 
                             tinhChatTong,
-                            trangThai: "" // Mặc định để trống, tính sau
+                            trangThai: "" 
                         });
                     }
                 }
@@ -240,20 +248,41 @@
     }
 
     function calculateComparisons() {
-        // Vòng lặp chạy ngược từ dưới lên (từ kỳ cũ sang kỳ mới hơn) hoặc xuôi theo danh sách đã sắp xếp.
-        // Vì danh sách hiển thị từ Mới nhất (ở trên) đến Cũ nhất (ở dưới). 
-        // Do đó dòng hiện tại (i) sẽ so sánh với dòng ngay phía dưới nó (i + 1) chính là kỳ liền trước trong lịch sử.
         for (let i = 0; i < finalData.length - 1; i++) {
             const kyHienTai = finalData[i];
-            const kyLienTruoc = finalData[i + 1]; // Ví dụ: i là kỳ 412 thì i+1 là kỳ 411
+            const kyLienTruoc = finalData[i + 1]; 
             
-            // So sánh tính chất cột Tổng giữa 2 kỳ kề nhau
             if (kyHienTai.tinhChatTong !== kyLienTruoc.tinhChatTong) {
-                kyLienTruoc.trangThai = "X"; // Nếu khác nhau thì đánh dấu X vào kỳ cũ (Ví dụ: kỳ 411)
+                kyLienTruoc.trangThai = "X"; 
             } else {
-                kyLienTruoc.trangThai = "";  // Nếu trùng thì bỏ qua
+                kyLienTruoc.trangThai = "";  
             }
         }
+    }
+
+    // Hàm đếm số lượng nhóm chuỗi X liên tiếp >= 5
+    function countXStreaks() {
+        let streakGroups = 0;
+        let currentStreak = 0;
+
+        for (let i = 0; i < finalData.length; i++) {
+            if (finalData[i].trangThai === "X") {
+                currentStreak++;
+            } else {
+                // Khi chuỗi X đứt đoạn, nếu chuỗi cũ trước đó dài >= 5 thì ghi nhận 1 nhóm
+                if (currentStreak >= 5) {
+                    streakGroups++;
+                }
+                currentStreak = 0; 
+            }
+        }
+        // Kiểm tra lượt cuối cùng ở dòng đáy bảng
+        if (currentStreak >= 5) {
+            streakGroups++;
+        }
+
+        // Đổ số lượng chuỗi đếm được vào ô thông báo
+        xStreakCount.innerText = streakGroups;
     }
 
     function renderTable() {
