@@ -2,344 +2,331 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCR VN168 PRO - Xử lý 200+ ảnh</title>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tính Lương Theo Lịch Tháng</title>
     <style>
-        :root { --primary: #ff5c5c; --secondary: #27ae60; --bg: #0f0f0f; --text: #e0e0e0; --color-lon: yellow; --color-nho: #00e5ff; }
-        body { font-family: sans-serif; background: var(--bg); color: var(--text); padding: 10px; margin: 0; }
-        .container { max-width: 1000px; margin: auto; background: #1a1a1a; padding: 15px; border-radius: 10px; }
-        h2 { text-align: center; color: var(--primary); margin-top: 5px; }
-        
-        .upload-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .upload-box { 
-            flex: 1; border: 2px dashed #444; padding: 20px; text-align: center; 
-            cursor: pointer; background: #222; border-radius: 8px; font-size: 14px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-        .upload-box:hover { border-color: var(--primary); background: #2a2a2a; }
-        
-        #file-count { color: #f1c40f; font-weight: bold; display: block; text-align: center; margin: 10px 0; }
-        .progress { height: 15px; background: #333; border-radius: 8px; margin: 10px 0; display: none; overflow: hidden; }
-        .progress-bar { height: 100%; background: var(--secondary); width: 0%; transition: width 0.1s; }
-        
-        /* CSS cho hàng nút bấm và ô hiển thị đếm chuỗi */
-        .btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px; align-items: center; }
-        button, .info-box { padding: 10px 15px; border: none; border-radius: 5px; font-weight: bold; font-size: 13.33px; }
-        button { cursor: pointer; }
-        .btn-scan { background: #e74c3c; color: white; }
-        .btn-dl { background: #27ae60; color: white; }
-        .btn-img { background: #3498db; color: white; }
-        .btn-pdf { background: #9b59b6; color: white; }
-        
-        /* CSS ô đếm chuỗi X bên cạnh nút Xóa hết */
-        .info-box { background: #222; color: #fff; border: 1px solid #f1c40f; display: inline-block; }
-        #xStreakCount { color: #f1c40f; font-size: 16px; margin: 0 2px; }
-
-        #tableCaptureArea { background: #000; padding: 10px; border-radius: 5px; }
-        #txtHorizontal { 
-            width: 100%; min-height: 80px; padding: 10px; background: #000; color: #00ff41; 
-            font-family: monospace; font-size: 20px; font-weight: bold; border: 1px solid #333;
-            white-space: pre-wrap; word-wrap: break-word; line-height: 1.4;
+        body {
+            background-color: #f0f2f5;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
         }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background: var(--primary); color: white; padding: 8px; font-size: 14px; }
-        td { padding: 6px; text-align: center; border-bottom: 1px solid #333; font-family: monospace; font-size: 16px; }
-        .txt-lon { color: var(--color-lon); font-weight: bold; }
-        .txt-nho { color: var(--color-nho); font-weight: bold; }
-        .txt-tong { color: #ff9f43; font-weight: bold; }
-        .txt-mark { color: #ff4757; font-weight: bold; font-size: 18px; }
-        #canvas-helper { display: none; }
-
-        @media print {
-            body { background: #000 !important; }
-            .container { background: #000 !important; max-width: 100% !important; border: none !important; }
-            .upload-row, .btns, .progress, #status, h2 { display: none !important; }
-            #tableCaptureArea { background: #000 !important; }
-            #txtHorizontal { border: 1px solid #fff !important; color: #00ff41 !important; }
-            td, th { border-bottom: 1px solid #444 !important; color: #fff !important; }
-            .txt-lon { color: yellow !important; }
-            .txt-nho { color: #00e5ff !important; }
-            .txt-tong { color: #ff9f43 !important; }
-            .txt-mark { color: #ff4757 !important; }
+        .container {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 420px;
+        }
+        .header-nav {
+            background-color: #2e7d32;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        .header-nav button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+        .controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .controls select, .controls input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 15px;
+        }
+        .weekday-header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 13px;
+            color: #666;
+            padding-bottom: 6px;
+        }
+        .weekday-header.sun {
+            color: #d32f2f;
+        }
+        .calendar-cell {
+            aspect-ratio: 1;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+            font-size: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+        .calendar-cell.empty {
+            background: transparent;
+            border: none;
+            cursor: default;
+        }
+        .calendar-cell.disabled {
+            background: #eee;
+            color: #aaa;
+            cursor: not-allowed;
+        }
+        .calendar-cell.sun {
+            color: #d32f2f;
+        }
+        .calendar-cell.checked {
+            background-color: #e8f5e9;
+            border-color: #2e7d32;
+            color: #2e7d32;
+        }
+        .calendar-cell input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+        .sub-text {
+            font-size: 10px;
+            font-weight: normal;
+            color: #777;
+            margin-top: 2px;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .result p {
+            margin: 4px 0;
+            font-size: 13px;
+            color: #495057;
+            display: flex;
+            justify-content: space-between;
+        }
+        .result span {
+            font-weight: 600;
+            color: #212529;
+        }
+        .total-salary {
+            font-size: 16px !important;
+            color: #d32f2f !important;
+            font-weight: bold !important;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>VN168 - QUÉT SỐ LƯỢNG LỚN</h2>
-    
-    <div class="upload-row">
-        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-            <b>🖼️ CHỌN ẢNH</b>
-            <small>(Nhiều file lẻ)</small>
-            <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
-        </div>
-        <div class="upload-box" onclick="document.getElementById('folderInput').click()">
-            <b>📁 CHỌN THƯ MỤC</b>
-            <small>(Quét cả folder)</small>
-            <input type="file" id="folderInput" webkitdirectory directory multiple style="display: none;">
-        </div>
+    <!-- Bảng điều khiển tháng/năm giống ảnh -->
+    <div class="header-nav">
+        <button onclick="changeMonth(-1)">❮</button>
+        <span id="monthYearTitle">THÁNG 07 - 2026</span>
+        <button onclick="changeMonth(1)">❯</button>
     </div>
 
-    <span id="file-count">Chưa có ảnh nào</span>
-
-    <div class="btns">
-        <button id="scanBtn" class="btn-scan" disabled>BẮT ĐẦU QUÉT</button>
-        <button id="downloadBtn" class="btn-dl" disabled>TẢI FILE .TXT</button>
-        <button id="exportImgBtn" class="btn-img" disabled>XUẤT ẢNH HD</button>
-        <button id="pdfBtn" class="btn-pdf" disabled>XUẤT FILE PDF</button> 
-        <button onclick="location.reload()" style="background:#555; color:white;">XÓA HẾT</button>
-        <div class="info-box">🔥 Số chuỗi X liên tiếp (≥5): <span id="xStreakCount">0</span> chuỗi</div>
+    <div class="controls">
+        <select id="monthSelect" onchange="updateCalendarFromSelect()">
+            <option value="0">Tháng 1</option>
+            <option value="1">Tháng 2</option>
+            <option value="2">Tháng 3</option>
+            <option value="3">Tháng 4</option>
+            <option value="4">Tháng 5</option>
+            <option value="5">Tháng 6</option>
+            <option value="6" selected>Tháng 7</option>
+            <option value="7">Tháng 8</option>
+            <option value="8">Tháng 9</option>
+            <option value="9">Tháng 10</option>
+            <option value="10">Tháng 11</option>
+            <option value="11">Tháng 12</option>
+        </select>
+        <input type="number" id="yearInput" value="2026" onchange="renderCalendar()">
     </div>
 
-    <div class="progress" id="progressBox"><div class="progress-bar" id="progressBar"></div></div>
-    <div id="status" style="text-align:center; margin-bottom:10px; font-size: 14px;"></div>
+    <!-- Khung lịch dạng lưới -->
+    <div class="calendar-grid" id="calendarGrid">
+        <!-- Các thứ trong tuần -->
+        <div class="weekday-header">Th 2</div>
+        <div class="weekday-header">Th 3</div>
+        <div class="weekday-header">Th 4</div>
+        <div class="weekday-header">Th 5</div>
+        <div class="weekday-header">Th 6</div>
+        <div class="weekday-header">Th 7</div>
+        <div class="weekday-header sun">CN</div>
+        <!-- Các ngày sẽ được tạo tự động bằng JS -->
+    </div>
 
-    <div id="tableCaptureArea">
-        <div id="txtHorizontal">Dãy số...</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Kỳ xổ</th>
-                    <th>Số</th>
-                    <th>Lớn Nhỏ</th>
-                    <th>Tổng</th>
-                    <th>Trạng thái</th>
-                </tr>
-            </thead>
-            <tbody id="resultBody"></tbody>
-        </table>
+    <!-- Bảng kết quả -->
+    <div class="result" id="resultContainer">
+        <p>Tổng số ngày làm: <span id="validDays">0</span></p>
+        <p>• Thứ 2 (160k): <span id="countMon">0</span> ngày</p>
+        <p>• Thứ 3 & 4 (140k): <span id="countTueWed">0</span> ngày</p>
+        <p>• Thứ 5, 6, 7 (165k): <span id="countThuFriSat">0</span> ngày</p>
+        <hr style="border: 0; border-top: 1px solid #ddd; margin: 6px 0;">
+        <p>Tổng tiền lương: <span class="total-salary" id="totalSalary">0 đ</span></p>
     </div>
 </div>
 
-<canvas id="canvas-helper"></canvas>
-
 <script>
-    const fileInput = document.getElementById('fileInput');
-    const folderInput = document.getElementById('folderInput');
-    const fileCountText = document.getElementById('file-count');
-    const scanBtn = document.getElementById('scanBtn');
-    const resultBody = document.getElementById('resultBody');
-    const txtHorizontal = document.getElementById('txtHorizontal');
-    const progressBar = document.getElementById('progressBar');
-    const progressBox = document.getElementById('progressBox');
-    const status = document.getElementById('status');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const exportImgBtn = document.getElementById('exportImgBtn');
-    const pdfBtn = document.getElementById('pdfBtn');
-    const canvas = document.getElementById('canvas-helper');
-    const ctx = canvas.getContext('2d');
-    const xStreakCount = document.getElementById('xStreakCount');
+    let currentYear = 2026;
+    let currentMonth = 6; // Tháng 7 (0-indexed)
 
-    let allFiles = []; 
-    let finalData = [];
+    function renderCalendar() {
+        currentYear = parseInt(document.getElementById('yearInput').value);
+        currentMonth = parseInt(document.getElementById('monthSelect').value);
+        
+        document.getElementById('monthYearTitle').innerText = `THÁNG ${String(currentMonth + 1).padStart(2, '0')} - ${currentYear}`;
 
-    fileInput.addEventListener('change', handleFiles);
-    folderInput.addEventListener('change', handleFiles);
+        const grid = document.getElementById('calendarGrid');
+        
+        // Giữ lại các tiêu đề thứ
+        const headers = grid.querySelectorAll('.weekday-header');
+        grid.innerHTML = '';
+        headers.forEach(h => grid.appendChild(h));
 
-    function handleFiles(e) {
-        const newFiles = Array.from(e.target.files).filter(file => file.type.startsWith('image/'));
-        if (newFiles.length > 0) {
-            allFiles = allFiles.concat(newFiles);
-            fileCountText.innerText = `Đã tích lũy: ${allFiles.length} ảnh`;
-            scanBtn.disabled = false;
-        }
-        e.target.value = ""; 
-    }
+        // Lấy ngày đầu tiên của tháng và tổng số ngày trong tháng
+        const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
+        // Chuyển đổi Chủ Nhật từ 0 thành 7 để khớp với layout Th2 -> CN
+        const startingSpace = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
 
-    scanBtn.addEventListener('click', async () => {
-        if (allFiles.length === 0) return;
+        const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-        scanBtn.disabled = true;
-        progressBox.style.display = 'block';
-        finalData = [];
-        resultBody.innerHTML = "";
-        xStreakCount.innerText = "0";
-
-        const worker = await Tesseract.createWorker({
-            cacheMethod: 'none',
-            logger: m => { if(m.status === 'recognizing') console.log(m.progress); }
-        });
-        await worker.loadLanguage('eng');
-        await worker.initialize('eng');
-
-        for (let i = 0; i < allFiles.length; i++) {
-            status.innerText = `Đang xử lý ${i + 1}/${allFiles.length}...`;
-            progressBar.style.width = ((i + 1) / allFiles.length) * 100 + '%';
-
-            try {
-                const imgData = await preprocessImage(allFiles[i]);
-                const { data: { text } } = await worker.recognize(imgData);
-                parseText(text);
-                URL.revokeObjectURL(imgData); 
-            } catch (err) {
-                console.error("Lỗi tại ảnh số " + i);
-            }
+        // Thêm ô trống đầu tháng nếu cần
+        for (let i = 0; i < startingSpace; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'calendar-cell empty';
+            grid.appendChild(emptyCell);
         }
 
-        await worker.terminate();
-        finalData.sort((a, b) => b.kyXoGoc.localeCompare(a.kyXoGoc));
-        
-        calculateComparisons();
-        countXStreaks(); // Chạy hàm đếm số chuỗi (số lượng nhóm)
-        
-        renderTable(); 
-        updateHorizontalData(); 
-
-        status.innerHTML = `<b style="color:#2ecc71">Xong! Tổng: ${finalData.length} kỳ</b>`;
-        downloadBtn.disabled = false;
-        exportImgBtn.disabled = false;
-        pdfBtn.disabled = false;
-    });
-
-    function preprocessImage(file) {
-        return new Promise((resolve) => {
-            const img = new Image();
-            const objectUrl = URL.createObjectURL(file);
-            img.onload = () => {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.filter = 'grayscale(1) contrast(1.2)';
-                ctx.drawImage(img, 0, 0);
-                const data = canvas.toDataURL('image/jpeg', 0.7);
-                URL.revokeObjectURL(objectUrl); 
-                resolve(data);
-            };
-            img.src = objectUrl;
-        });
-    }
-
-    function parseText(text) {
-        const lines = text.split('\n');
-        lines.forEach(line => {
-            const kyXoMatch = line.match(/\d{10,}/);
-            if (kyXoMatch) {
-                const kyXoGoc = kyXoMatch[0];
-                const kyXo5So = kyXoGoc.slice(-5);
-                
-                const sauKyXo = line.split(kyXoGoc)[1] || "";
-                const numMatch = sauKyXo.match(/\d/);
-                if (numMatch) {
-                    const conSo = parseInt(numMatch[0]);
-                    let lonNho = (conSo >= 5) ? "Lớn" : "Nhỏ";
-                    
-                    const soCuoiKyXo = parseInt(kyXoGoc.slice(-1));
-                    const tongSo = soCuoiKyXo + conSo;
-                    
-                    let tinhChatTong = (tongSo < 10) ? "Nhỏ" : "Lớn";
-
-                    if(!finalData.some(item => item.kyXoGoc === kyXoGoc)) {
-                        finalData.push({
-                            kyXoGoc, 
-                            kyXo5So, 
-                            conSo, 
-                            lonNho, 
-                            tongSo, 
-                            tinhChatTong,
-                            trangThai: "" 
-                        });
-                    }
-                }
-            }
-        });
-    }
-
-    function calculateComparisons() {
-        for (let i = 0; i < finalData.length - 1; i++) {
-            const kyHienTai = finalData[i];
-            const kyLienTruoc = finalData[i + 1]; 
+        // Tạo các ngày trong tháng
+        for (let day = 1; day <= totalDays; day++) {
+            const dateObj = new Date(currentYear, currentMonth, day);
+            const dayOfWeek = dateObj.getDay(); // 0: CN, 1: Th2...
             
-            if (kyHienTai.tinhChatTong !== kyLienTruoc.tinhChatTong) {
-                kyLienTruoc.trangThai = "X"; 
+            const cell = document.createElement('div');
+            let cellClass = 'calendar-cell';
+            
+            if (dayOfWeek === 0) cellClass += ' sun';
+
+            // Kiểm tra điều kiện vô hiệu hóa (Chủ Nhật hoặc ngày >= 29)
+            const isDisabled = (day >= 29 || dayOfWeek === 0);
+            if (isDisabled) {
+                cellClass += ' disabled';
             } else {
-                kyLienTruoc.trangThai = "";  
+                cellClass += ' checked'; // Mặc định bật các ngày làm việc hợp lệ
             }
-        }
-    }
 
-    // Hàm đếm số lượng nhóm chuỗi X liên tiếp >= 5
-    function countXStreaks() {
-        let streakGroups = 0;
-        let currentStreak = 0;
+            cell.className = cellClass;
 
-        for (let i = 0; i < finalData.length; i++) {
-            if (finalData[i].trangThai === "X") {
-                currentStreak++;
-            } else {
-                // Khi chuỗi X đứt đoạn, nếu chuỗi cũ trước đó dài >= 5 thì ghi nhận 1 nhóm
-                if (currentStreak >= 5) {
-                    streakGroups++;
-                }
-                currentStreak = 0; 
+            let inputHtml = '';
+            if (!isDisabled) {
+                inputHtml = `<input type="checkbox" value="${day}" data-dow="${dayOfWeek}" checked onclick="toggleCell(this)">`;
             }
+
+            cell.innerHTML = `
+                ${inputHtml}
+                <span>${day}</span>
+            `;
+            grid.appendChild(cell);
         }
-        // Kiểm tra lượt cuối cùng ở dòng đáy bảng
-        if (currentStreak >= 5) {
-            streakGroups++;
+
+        calculateSalary();
+    }
+
+    function toggleCell(input) {
+        const cell = input.parentElement;
+        if (input.checked) {
+            cell.classList.add('checked');
+        } else {
+            cell.classList.remove('checked');
         }
-
-        // Đổ số lượng chuỗi đếm được vào ô thông báo
-        xStreakCount.innerText = streakGroups;
+        calculateSalary();
     }
 
-    function renderTable() {
-        let html = "";
-        finalData.forEach(d => {
-            const colorClass = (d.lonNho === "Lớn") ? "txt-lon" : "txt-nho";
-            html += `<tr>
-                <td>${d.kyXo5So}</td>
-                <td class="${colorClass}">${d.conSo}</td>
-                <td class="${colorClass}">${d.lonNho}</td>
-                <td class="txt-tong">${d.tongSo}</td>
-                <td class="txt-mark">${d.trangThai}</td>
-            </tr>`;
-        });
-        resultBody.innerHTML = html;
+    function changeMonth(direction) {
+        currentMonth += direction;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        } else if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        document.getElementById('monthSelect').value = currentMonth;
+        document.getElementById('yearInput').value = currentYear;
+        renderCalendar();
     }
 
-    function updateHorizontalData() {
-        const sortedData = [...finalData].sort((a, b) => a.kyXoGoc.localeCompare(b.kyXoGoc));
-        txtHorizontal.innerText = sortedData.map(item => item.conSo).join(" ");
+    function updateCalendarFromSelect() {
+        renderCalendar();
     }
 
-    downloadBtn.addEventListener('click', () => {
-        const content = txtHorizontal.innerText;
-        const digitCount = content.replace(/\s/g, '').length;
+    function calculateSalary() {
+        const checkboxes = document.querySelectorAll('.calendar-cell input[type="checkbox"]:checked');
         
-        const blob = new Blob([content], {type: 'text/plain;charset=utf-8'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `vn168 - ${digitCount}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }, 0);
-    });
+        let validDaysCount = 0;
+        let countMon = 0;
+        let countTueWed = 0;
+        let countThuFriSat = 0;
+        let totalSalary = 0;
 
-    exportImgBtn.addEventListener('click', () => {
-        status.innerText = "Đang vẽ ảnh...";
-        html2canvas(document.getElementById('tableCaptureArea'), {
-            scale: 2,
-            backgroundColor: "#000",
-            useCORS: true
-        }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `VN168_Export.png`;
-            link.href = canvas.toDataURL("image/png");
-            link.click();
-            status.innerText = "✅ Xuất ảnh thành công!";
+        checkboxes.forEach(cb => {
+            const dayOfWeek = parseInt(cb.getAttribute('data-dow'));
+            validDaysCount++;
+
+            if (dayOfWeek === 1) {
+                countMon++;
+                totalSalary += 160000;
+            } else if (dayOfWeek === 2 || dayOfWeek === 3) {
+                countTueWed++;
+                totalSalary += 140000;
+            } else if (dayOfWeek >= 4 && dayOfWeek <= 6) {
+                countThuFriSat++;
+                totalSalary += 165000;
+            }
         });
-    });
 
-    pdfBtn.addEventListener('click', () => {
-        window.print();
-    });
+        document.getElementById('validDays').innerText = validDaysCount + ' ngày';
+        document.getElementById('countMon').innerText = countMon + ' ngày';
+        document.getElementById('countTueWed').innerText = countTueWed + ' ngày';
+        document.getElementById('countThuFriSat').innerText = countThuFriSat + ' ngày';
+        document.getElementById('totalSalary').innerText = totalSalary.toLocaleString('vi-VN') + ' đ';
+    }
+
+    window.onload = renderCalendar;
 </script>
+
 </body>
-</html>
+    </html>
+    
