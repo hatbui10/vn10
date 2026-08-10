@@ -197,9 +197,9 @@
 
     <div class="result" id="resultContainer">
         <p>Tổng số ngày làm: <span id="validDays">0</span></p>
-        <p>• Thứ 2 (160k): <span id="countMon">0</span> ngày</p>
+        <p>• Thứ 2 (140k): <span id="countMon">0</span> ngày</p>
         <p>• Thứ 3 & 4 (140k): <span id="countTueWed">0</span> ngày</p>
-        <p>• Thứ 5, 6, 7 (165k): <span id="countThuFriSat">0</span> ngày</p>
+        <p>• Thứ 5, 6, 7 (140k): <span id="countThuFriSat">0</span> ngày</p>
         <hr style="border: 0; border-top: 1px solid #ddd; margin: 6px 0;">
         <p>Tổng tiền lương: <span class="total-salary" id="totalSalary">0 đ</span></p>
     </div>
@@ -311,13 +311,13 @@
 
             if (dayOfWeek === 1) {
                 countMon++;
-                totalSalary += 160000;
+                totalSalary += 140000;
             } else if (dayOfWeek === 2 || dayOfWeek === 3) {
                 countTueWed++;
                 totalSalary += 140000;
             } else if (dayOfWeek >= 4 && dayOfWeek <= 6) {
                 countThuFriSat++;
-                totalSalary += 165000;
+                totalSalary += 140000;
             }
         });
 
